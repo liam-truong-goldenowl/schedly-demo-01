@@ -14,7 +14,7 @@ import {
   AT_LEAST_EIGHT_CHARACTERS,
 } from '@/shared/constants/regex';
 
-export function PasswordInput({
+export function PasswordInputWithStrength({
   className,
   ...props
 }: React.ComponentProps<typeof Input>) {

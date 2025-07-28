@@ -34,7 +34,7 @@ import {
 
 import { signUp } from '../services/auth.api';
 
-import { PasswordInput } from './PasswordInput';
+import { PasswordInputWithStrength } from './PasswordInputWithStrength';
 
 export function SignUpForm() {
   const router = useRouter();
@@ -149,7 +149,10 @@ export function SignUpForm() {
                 <FormItem>
                   <FormLabel>{t('password.label')}</FormLabel>
                   <FormControl>
-                    <PasswordInput disabled={isSignUpPending} {...field} />
+                    <PasswordInputWithStrength
+                      disabled={isSignUpPending}
+                      {...field}
+                    />
                   </FormControl>
                 </FormItem>
               )}
