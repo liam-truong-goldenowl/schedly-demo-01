@@ -1,3 +1,5 @@
+import { Section } from '@/shared/components/layout/Section';
+
 export default function LoginPage() {
-  return <div>Hello from Login</div>;
+  return <Section>Hello from Login</Section>;
 }
