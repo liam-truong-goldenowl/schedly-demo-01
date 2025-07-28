@@ -22,5 +22,39 @@
 
   "Footer": {
     "copyright": "Copyright Schedly {year}"
+  },
+
+  "SignUpForm": {
+    "title": "Create an account",
+    "subtitle": "Sign up to get started",
+    "description": "Please fill in the form below to create an account.",
+    "email": {
+      "label": "Enter your email to get started",
+      "placeholder": "email.address@mail.com",
+      "error": "Please enter a valid email address",
+      "apiError": "This email is already in use. Please try another one."
+    },
+    "name": {
+      "label": "Enter your full name",
+      "placeholder": "John Doe",
+      "error": "Name must be present"
+    },
+    "password": {
+      "label": "Choose a strong password",
+      "error": "Password must meet the following requirements",
+      "requirements": {
+        "minLength": "At least 8 characters",
+        "uppercase": "At least one uppercase letter",
+        "lowercase": "At least one lowercase letter",
+        "number": "At least one number"
+      }
+    },
+    "submitButton": {
+      "text": "Continue"
+    },
+    "toast": {
+      "loading": "Your account is successfully created.",
+      "description": "You will be redirected to the login page shortly."
+    }
   }
 }
