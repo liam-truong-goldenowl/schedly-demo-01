@@ -1,10 +1,9 @@
 'use client';
 
-import { useMemo, useState } from 'react';
+import { useMemo } from 'react';
 import { useTranslations } from 'next-intl';
-import { XIcon, EyeIcon, CheckIcon, EyeOffIcon } from 'lucide-react';
+import { XIcon, CheckIcon } from 'lucide-react';
 
-import { cn } from '@/shared/lib/utils';
 import { Input } from '@/shared/components/ui/input';
 import { FormMessage } from '@/shared/components/ui/form';
 import {
@@ -14,14 +13,12 @@ import {
   AT_LEAST_EIGHT_CHARACTERS,
 } from '@/shared/constants/regex';
 
-export function PasswordInputWithStrength({
-  className,
-  ...props
-}: React.ComponentProps<typeof Input>) {
-  const t = useTranslations('SignUpForm.password');
-  const [isVisible, setIsVisible] = useState<boolean>(false);
+import { PasswordInput } from './PasswordInput';
 
-  const toggleVisibility = () => setIsVisible((prevState) => !prevState);
+export function PasswordInputWithStrength(
+  props: React.ComponentProps<typeof Input>,
+) {
+  const t = useTranslations('SignUpForm.password');
 
   const checkStrength = (pass: string) => {
     const requirements = [
@@ -54,29 +51,7 @@ export function PasswordInputWithStrength({
 
   return (
     <div>
-      {/* Password input field with toggle visibility */}
-      <div className="relative">
-        <Input
-          {...props}
-          className={cn('pe-9', className)}
-          type={isVisible ? 'text' : 'password'}
-        />
-        <button
-          className="text-muted-foreground/80 hover:text-foreground focus-visible:border-ring focus-visible:ring-ring/50 absolute inset-y-0 end-0 flex h-full w-9 items-center justify-center rounded-e-md transition-[color,box-shadow] outline-none focus:z-10 focus-visible:ring-[3px] disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50"
-          type="button"
-          onClick={toggleVisibility}
-          aria-label={isVisible ? 'Hide password' : 'Show password'}
-          aria-pressed={isVisible}
-          aria-controls="password"
-        >
-          {isVisible ? (
-            <EyeOffIcon size={16} aria-hidden="true" />
-          ) : (
-            <EyeIcon size={16} aria-hidden="true" />
-          )}
-        </button>
-      </div>
-
+      <PasswordInput {...props} />
       <FormMessage className="mt-2" />
 
       {/* Password strength indicator */}
