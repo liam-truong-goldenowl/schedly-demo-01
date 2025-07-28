@@ -22,5 +22,39 @@
 
   "Footer": {
     "copyright": "Copyright Schedly {year}"
+  },
+
+  "SignUpForm": {
+    "title": "Ein Konto erstellen",
+    "subtitle": "Melde dich an, um loszulegen",
+    "description": "Bitte fülle das folgende Formular aus, um ein Konto zu erstellen.",
+    "email": {
+      "label": "Gib deine E-Mail-Adresse ein, um loszulegen",
+      "placeholder": "email.adresse@mail.com",
+      "error": "Bitte gib eine gültige E-Mail-Adresse ein",
+      "apiError": "Diese E-Mail-Adresse wird bereits verwendet. Bitte versuche eine andere."
+    },
+    "name": {
+      "label": "Gib deinen vollständigen Namen ein",
+      "placeholder": "Max Mustermann",
+      "error": "Der Name muss angegeben werden"
+    },
+    "password": {
+      "label": "Wähle ein sicheres Passwort",
+      "error": "Das Passwort muss folgende Anforderungen erfüllen",
+      "requirements": {
+        "minLength": "Mindestens 8 Zeichen",
+        "uppercase": "Mindestens ein Großbuchstabe",
+        "lowercase": "Mindestens ein Kleinbuchstabe",
+        "number": "Mindestens eine Zahl"
+      }
+    },
+    "submitButton": {
+      "text": "Fortfahren"
+    },
+    "toast": {
+      "loading": "Dein Konto wurde erfolgreich erstellt.",
+      "description": "Du wirst in Kürze zur Anmeldeseite weitergeleitet."
+    }
   }
 }
