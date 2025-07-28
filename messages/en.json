@@ -13,5 +13,14 @@
   "LanguageSwitch": {
     "en": "English",
     "de": "Deutsch"
+  },
+
+  "Header": {
+    "login": "Log in",
+    "sign-up": "Get started"
+  },
+
+  "Footer": {
+    "copyright": "Copyright Schedly {year}"
   }
 }
