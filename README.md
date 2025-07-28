@@ -19,7 +19,7 @@ Before you begin, ensure you have the following installed:
 Clone the repo
 
 ```sh
-git clone git@github.com:liam-truong-goldenowl/nextjs-app-template.git
+git clone git@github.com:liam-truong-goldenowl/schedly-demo-01.git
 ```
 
 ### Steps to Run Project
@@ -29,7 +29,7 @@ A step by step guide that will tell you how to get the development environment u
 1. Navigate to the project folder
 
    ```sh
-   cd nextjs-app-template # Or your custom directory
+   cd schedly-demo-01 # Or your custom directory
    ```
 
 1. Install NPM packages
@@ -52,7 +52,7 @@ A step by step guide that will tell you how to get the development environment u
 1. Navigate to the project folder
 
    ```sh
-   cd nextjs-app-template # Or your custom directory
+   cd schedly-demo-01 # Or your custom directory
    ```
 
 1. Install NPM packages
@@ -67,7 +67,7 @@ A step by step guide that will tell you how to get the development environment u
 ## Folder Structure
 
 ```sh
-nextjs-app-template/
+schedly-demo-01/
 │
 ├── .github/                  # GitHub configuration files
 ├── .storybook/               # Storybook entry
@@ -77,7 +77,6 @@ nextjs-app-template/
 ├── vitest.config.ts          # Vitest config
 ├── postcss.config.mjs        # PostCSS config
 ├── eslint.config.mjs         # ESLint config
-├── lint-staged.config.mjs    # lint-staged config
 ├── commitlint.config.js      # commit-lint config
 ├── lefthook.yml              # Lefthook config
 ├── .prettierrc               # Prettier config
