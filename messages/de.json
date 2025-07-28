@@ -57,5 +57,28 @@
       "loading": "Dein Konto wurde erfolgreich erstellt.",
       "description": "Du wirst in Kürze zur Anmeldeseite weitergeleitet."
     }
+  },
+
+  "LoginForm": {
+    "title": "Willkommen zurück",
+    "subtitle": "Melde dich an, um fortzufahren",
+    "description": "Bitte gib deine Anmeldedaten ein, um dich anzumelden.",
+    "apiError": "Ungültige E-Mail oder Passwort. Bitte versuche es erneut.",
+    "email": {
+      "label": "E-Mail-Adresse",
+      "placeholder": "email.adresse@mail.com",
+      "error": "Bitte gib eine gültige E-Mail-Adresse ein"
+    },
+    "password": {
+      "label": "Passwort",
+      "error": "Bitte gib dein Passwort ein"
+    },
+    "submitButton": {
+      "text": "Anmelden"
+    },
+    "toast": {
+      "loading": "Du bist erfolgreich angemeldet.",
+      "description": "Du wirst in Kürze zur Startseite weitergeleitet."
+    }
   }
 }

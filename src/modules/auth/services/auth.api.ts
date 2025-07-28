@@ -16,3 +16,13 @@ export async function signUp(userData: {
     }),
   });
 }
+
+export async function login(credentials: { email: string; password: string }) {
+  return await api('@post/auth/login', {
+    body: credentials,
+    output: z.object({
+      accessToken: z.string(),
+      refreshToken: z.string(),
+    }),
+  });
+}

@@ -57,5 +57,28 @@
       "loading": "Tài khoản của bạn đã được tạo thành công.",
       "description": "Bạn sẽ được chuyển hướng đến trang đăng nhập trong giây lát."
     }
+  },
+
+  "LoginForm": {
+    "title": "Đăng nhập",
+    "subtitle": "Nhập thông tin đăng nhập của bạn để tiếp tục",
+    "description": "Vui lòng điền vào biểu mẫu bên dưới để đăng nhập.",
+    "apiError": "Email hoặc mật khẩu không đúng. Vui lòng thử lại.",
+    "email": {
+      "label": "Nhập email của bạn",
+      "placeholder": "email.address@mail.com",
+      "error": "Vui lòng nhập địa chỉ email hợp lệ"
+    },
+    "password": {
+      "label": "Nhập mật khẩu của bạn",
+      "error": "Vui lòng nhập mật khẩu"
+    },
+    "submitButton": {
+      "text": "Đăng nhập"
+    },
+    "toast": {
+      "loading": "Chào mừng trở lại!",
+      "description": "Bạn sẽ được chuyển hướng đến trang chính trong giây lát."
+    }
   }
 }
