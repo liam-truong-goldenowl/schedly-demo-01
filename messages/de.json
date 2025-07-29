@@ -1,6 +1,7 @@
 {
   "HomePage": {
-    "title": "Hallo Welt!"
+    "login": "Anmelden",
+    "signUp": "Registrieren"
   },
 
   "ThemeToggle": {

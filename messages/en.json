@@ -1,6 +1,7 @@
 {
   "HomePage": {
-    "title": "Hello world!"
+    "login": "Log in",
+    "signUp": "Sign Up"
   },
 
   "ThemeToggle": {

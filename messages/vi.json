@@ -1,6 +1,7 @@
 {
   "HomePage": {
-    "title": "Xin chào thế giới!"
+    "login": "Đăng nhập",
+    "signUp": "Đăng ký"
   },
 
   "ThemeToggle": {

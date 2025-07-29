@@ -1,7 +1,7 @@
 'use client';
 
 import z from 'zod';
-import { toast } from 'sonner';
+import { signIn } from 'next-auth/react';
 import { useForm } from 'react-hook-form';
 import { useTranslations } from 'next-intl';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -25,8 +25,6 @@ import {
   FormControl,
   FormMessage,
 } from '@/shared/components/ui/form';
-
-import { login } from '../services/auth.api';
 
 import { PasswordInput } from './PasswordInput';
 
@@ -56,27 +54,17 @@ export function LoginForm() {
 
   function onSubmit(values: z.infer<typeof formSchema>) {
     startTransition(async () => {
-      const { error } = await login(values);
-
-      if (error) {
-        setApiError(t('apiError'));
-        return;
-      }
-
-      setApiError(null);
-
-      const promise = () => {
-        return new Promise((resolve) => {
-          setTimeout(() => {
-            router.push('/');
-            resolve(true);
-          }, 2_000);
-        });
-      };
-      toast.promise(promise, {
-        loading: t('toast.loading'),
-        description: t('toast.description'),
+      const response = await signIn('credentials', {
+        ...values,
+        redirect: false,
       });
+
+      if (response?.error) {
+        setApiError(t(`apiError`));
+      } else {
+        setApiError(null);
+        router.push('/events');
+      }
     });
   }
 
