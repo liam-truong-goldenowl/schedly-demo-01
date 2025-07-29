@@ -23,8 +23,6 @@ export async function login(credentials: { email: string; password: string }) {
     output: z.object({
       accessToken: z.string(),
       refreshToken: z.string(),
-      userId: z.number(),
-      email: z.email(),
     }),
   });
 }
