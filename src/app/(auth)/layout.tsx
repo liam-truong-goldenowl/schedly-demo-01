@@ -7,9 +7,9 @@ import { Header } from '@/shared/components/layout/Header';
 
 export default async function AuthLayout({
   children,
-}: Readonly<{
+}: {
   children: React.ReactNode;
-}>) {
+}) {
   const session = await getSession();
 
   if (session && !session.error) {

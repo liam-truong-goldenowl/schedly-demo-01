@@ -1,21 +1,27 @@
-import Sidebar from './Sidebar';
-import { TopBar } from './TopBar';
+import { SiteHeader } from '@/shared/components/layout/SiteHeader';
+import { SidebarInset, SidebarProvider } from '@/shared/components/ui/sidebar';
 
-interface DashboardLayoutProps {
+import { AppSidebar } from './AppSidebar';
+
+export default function DashboardLayout({
+  children,
+}: {
   children: React.ReactNode;
-}
-
-export default function DashboardLayout({ children }: DashboardLayoutProps) {
+}) {
   return (
-    <div className="bg-muted/70 min-h-dvh">
-      <Sidebar />
-      <div className="lg:pl-64">
-        <TopBar />
-
-        <main className="py-10">
-          <div className="px-4 sm:px-6 lg:px-8">{children}</div>
-        </main>
-      </div>
-    </div>
+    <SidebarProvider
+      style={
+        {
+          '--sidebar-width': 'calc(var(--spacing) * 64)',
+          '--header-height': 'calc(var(--spacing) * 18)',
+        } as React.CSSProperties
+      }
+    >
+      <AppSidebar variant="floating" />
+      <SidebarInset>
+        <SiteHeader />
+        <main className="bg-muted/50 h-full">{children}</main>
+      </SidebarInset>
+    </SidebarProvider>
   );
 }
