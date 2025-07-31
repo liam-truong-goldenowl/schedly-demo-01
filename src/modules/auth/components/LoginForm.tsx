@@ -108,6 +108,7 @@ export function LoginForm() {
                   <FormControl>
                     <PasswordInput disabled={isSignUpPending} {...field} />
                   </FormControl>
+                  <FormMessage />
                 </FormItem>
               )}
             />

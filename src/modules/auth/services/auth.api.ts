@@ -5,6 +5,7 @@ import { api } from '@/shared/lib/api';
 export async function signUp(userData: {
   name: string;
   email: string;
+  timezone: string;
   password: string;
 }) {
   return await api('@post/auth/sign-up', {
