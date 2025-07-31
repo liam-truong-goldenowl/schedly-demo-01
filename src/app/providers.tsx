@@ -1,4 +1,5 @@
 import { NextIntlClientProvider } from 'next-intl';
+import { NuqsAdapter } from 'nuqs/adapters/next/app';
 
 import { Toaster } from '@/shared/components/ui/sonner';
 import AuthProvider from '@/shared/components/providers/AuthProvider';
@@ -13,7 +14,9 @@ export function Providers({ children }: { children: React.ReactNode }) {
       disableTransitionOnChange
     >
       <NextIntlClientProvider>
-        <AuthProvider>{children}</AuthProvider>
+        <AuthProvider>
+          <NuqsAdapter>{children}</NuqsAdapter>
+        </AuthProvider>
       </NextIntlClientProvider>
       <Toaster position="top-center" closeButton richColors />
     </ThemeProvider>
