@@ -73,7 +73,8 @@ export function SignUpForm() {
 
   function onSubmit(values: z.infer<typeof formSchema>) {
     startTransition(async () => {
-      const { data, error } = await signUp(values);
+      const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+      const { data, error } = await signUp({ ...values, timezone });
 
       if (error) {
         form.setError('email', {
@@ -164,8 +165,6 @@ export function SignUpForm() {
             </div>
           </form>
         </Form>
-        {/* <p>terms and privacy policy</p>
-        <p>Login</p> */}
       </CardContent>
     </Card>
   );
