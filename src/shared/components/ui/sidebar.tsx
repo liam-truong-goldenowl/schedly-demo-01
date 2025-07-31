@@ -2,6 +2,7 @@
 
 import * as React from 'react';
 import { Slot } from '@radix-ui/react-slot';
+import { IconMenu2 } from '@tabler/icons-react';
 import { cva, VariantProps } from 'class-variance-authority';
 import { ChevronsLeftIcon, ChevronsRightIcon } from 'lucide-react';
 
@@ -261,14 +262,19 @@ function SidebarTrigger({
       data-slot="sidebar-trigger"
       variant="ghost"
       size="icon"
-      className={cn('size-8', className)}
+      className={cn('!size-10', className)}
       onClick={(event) => {
         onClick?.(event);
         toggleSidebar();
       }}
       {...props}
     >
-      {state === 'collapsed' ? <ChevronsRightIcon /> : <ChevronsLeftIcon />}
+      <IconMenu2 className="!size-5 md:hidden" />
+      {state == 'collapsed' ? (
+        <ChevronsRightIcon className="hidden !size-5 md:block" />
+      ) : (
+        <ChevronsLeftIcon className="hidden !size-5 md:block" />
+      )}
       <span className="sr-only">Toggle Sidebar</span>
     </Button>
   );

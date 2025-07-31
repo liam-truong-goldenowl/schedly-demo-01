@@ -1,6 +1,7 @@
 import { SiteHeader } from '@/shared/components/layout/SiteHeader';
 import { SidebarInset, SidebarProvider } from '@/shared/components/ui/sidebar';
 
+import { Container } from './Container';
 import { AppSidebar } from './AppSidebar';
 
 export default function DashboardLayout({
@@ -20,7 +21,9 @@ export default function DashboardLayout({
       <AppSidebar variant="floating" />
       <SidebarInset>
         <SiteHeader />
-        <main className="bg-muted/50 h-full">{children}</main>
+        <div className="bg-muted/50 h-full">
+          <Container>{children}</Container>
+        </div>
       </SidebarInset>
     </SidebarProvider>
   );

@@ -1,13 +1,6 @@
 'use client';
 
-import {
-  IconUsers,
-  IconFolder,
-  IconChartBar,
-  IconSettings,
-  IconDashboard,
-  IconListDetails,
-} from '@tabler/icons-react';
+import { IconLink, IconSettings, IconClockHour3 } from '@tabler/icons-react';
 
 import { NavMain } from '@/shared/components/layout/NavMain';
 import { NavUser } from '@/shared/components/layout/NavUser';
@@ -30,34 +23,19 @@ const data = {
   navMain: [
     {
       title: 'Scheduling',
-      url: '#',
-      icon: IconDashboard,
-    },
-    {
-      title: 'Meetings',
-      url: '#',
-      icon: IconListDetails,
+      url: '/events',
+      icon: IconLink,
     },
     {
       title: 'Availability',
-      url: '#',
-      icon: IconChartBar,
-    },
-    {
-      title: 'Contacts',
-      url: '#',
-      icon: IconFolder,
-    },
-    {
-      title: 'Integrations',
-      url: '#',
-      icon: IconUsers,
+      url: '/availability',
+      icon: IconClockHour3,
     },
   ],
   navSecondary: [
     {
       title: 'Settings',
-      url: '#',
+      url: '/settings',
       icon: IconSettings,
     },
   ],
