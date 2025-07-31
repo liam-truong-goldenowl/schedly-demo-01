@@ -1,8 +1,8 @@
 import { NextIntlClientProvider } from 'next-intl';
 
 import { Toaster } from '@/shared/components/ui/sonner';
-import AuthProvider from '@/shared/components/AuthProvider';
-import { ThemeProvider } from '@/shared/components/ThemeProvider';
+import AuthProvider from '@/shared/components/providers/AuthProvider';
+import { ThemeProvider } from '@/shared/components/providers/ThemeProvider';
 
 export function Providers({ children }: { children: React.ReactNode }) {
   return (
