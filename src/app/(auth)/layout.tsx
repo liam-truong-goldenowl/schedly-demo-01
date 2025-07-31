@@ -1,6 +1,6 @@
 import { redirect } from 'next/navigation';
+import { getServerSession } from 'next-auth';
 
-import { getSession } from '@/shared/lib/auth';
 import { Page } from '@/shared/components/layout/Page';
 import { Footer } from '@/shared/components/layout/Footer';
 import { Header } from '@/shared/components/layout/Header';
@@ -10,9 +10,9 @@ export default async function AuthLayout({
 }: {
   children: React.ReactNode;
 }) {
-  const session = await getSession();
+  const session = await getServerSession();
 
-  if (session && !session.error) {
+  if (session) {
     redirect('/events');
   }
 

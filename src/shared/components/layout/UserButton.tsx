@@ -1,5 +1,6 @@
 'use client';
 
+import { signOut } from 'next-auth/react';
 import { IconLogout, IconCaretDownFilled } from '@tabler/icons-react';
 
 import {
@@ -46,7 +47,7 @@ export function UserButton() {
           </div>
         </DropdownMenuLabel>
         <DropdownMenuSeparator />
-        <DropdownMenuItem>
+        <DropdownMenuItem onClick={() => signOut({ callbackUrl: '/' })}>
           <IconLogout />
           Log out
         </DropdownMenuItem>
