@@ -1,12 +1,12 @@
 'use client';
 
 import z from 'zod';
-import { toast } from 'sonner';
+import { signIn } from 'next-auth/react';
 import { useForm } from 'react-hook-form';
 import { useTranslations } from 'next-intl';
-import { useRouter } from 'next/navigation';
-import { useMemo, useTransition } from 'react';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { useMemo, useState, useTransition } from 'react';
+import { useRouter, useSearchParams } from 'next/navigation';
 
 import { Input } from '@/shared/components/ui/input';
 import { StatefulButton } from '@/shared/components/ui/stateful-button';
@@ -25,39 +25,21 @@ import {
   FormControl,
   FormMessage,
 } from '@/shared/components/ui/form';
-import {
-  AT_LEAST_ONE_NUMBER,
-  AT_LEAST_ONE_LOWERCASE,
-  AT_LEAST_ONE_UPPERCASE,
-  AT_LEAST_EIGHT_CHARACTERS,
-} from '@/shared/constants/regex';
 
-import { signUp } from '../services/auth.api';
+import { PasswordInput } from './PasswordInput';
 
-import { PasswordInputWithStrength } from './PasswordInputWithStrength';
-
-export function SignUpForm() {
+export function LoginForm() {
   const router = useRouter();
-  const t = useTranslations('SignUpForm');
+  const searchParams = useSearchParams();
+  const t = useTranslations('LoginForm');
   const [isSignUpPending, startTransition] = useTransition();
+  const [apiError, setApiError] = useState<string | null>(null);
 
   const formSchema = useMemo(
     () =>
       z.object({
         email: z.email(t('email.error')),
-        name: z.string().min(1, t('name.error')),
-        password: z
-          .string()
-          .refine(
-            (val) =>
-              [
-                AT_LEAST_ONE_NUMBER,
-                AT_LEAST_ONE_UPPERCASE,
-                AT_LEAST_ONE_LOWERCASE,
-                AT_LEAST_EIGHT_CHARACTERS,
-              ].every((regex) => regex.test(val)),
-            { message: t('password.error') },
-          ),
+        password: z.string().min(1, { message: t('password.error') }),
       }),
     [t],
   );
@@ -65,37 +47,24 @@ export function SignUpForm() {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      email: '',
-      name: '',
+      email: searchParams.get('email') || '',
       password: '',
     },
   });
 
   function onSubmit(values: z.infer<typeof formSchema>) {
     startTransition(async () => {
-      const { data, error } = await signUp(values);
-
-      if (error) {
-        form.setError('email', {
-          type: 'manual',
-          message: t('email.apiError'),
-        });
-        return;
-      }
-
-      const promise = () => {
-        return new Promise((resolve) => {
-          setTimeout(() => {
-            router.push(`/login?email=${data.email}`);
-            resolve(true);
-          }, 2_000);
-        });
-      };
-
-      toast.promise(promise, {
-        loading: t('toast.loading'),
-        description: t('toast.description'),
+      const response = await signIn('credentials', {
+        ...values,
+        redirect: false,
       });
+
+      if (response?.error) {
+        setApiError(t(`apiError`));
+      } else {
+        setApiError(null);
+        router.push('/events');
+      }
     });
   }
 
@@ -108,6 +77,11 @@ export function SignUpForm() {
       <CardContent>
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-5">
+            {apiError && (
+              <p aria-live="polite" className="text-destructive mb-4 text-sm">
+                {apiError}
+              </p>
+            )}
             <FormField
               control={form.control}
               name="email"
@@ -127,32 +101,12 @@ export function SignUpForm() {
             />
             <FormField
               control={form.control}
-              name="name"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>{t('name.label')}</FormLabel>
-                  <FormControl>
-                    <Input
-                      placeholder={t('name.placeholder')}
-                      disabled={isSignUpPending}
-                      {...field}
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={form.control}
               name="password"
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>{t('password.label')}</FormLabel>
                   <FormControl>
-                    <PasswordInputWithStrength
-                      disabled={isSignUpPending}
-                      {...field}
-                    />
+                    <PasswordInput disabled={isSignUpPending} {...field} />
                   </FormControl>
                 </FormItem>
               )}
@@ -164,8 +118,6 @@ export function SignUpForm() {
             </div>
           </form>
         </Form>
-        {/* <p>terms and privacy policy</p>
-        <p>Login</p> */}
       </CardContent>
     </Card>
   );

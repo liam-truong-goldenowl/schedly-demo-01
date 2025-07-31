@@ -1,6 +1,7 @@
 {
   "HomePage": {
-    "title": "Hello world!"
+    "login": "Log in",
+    "signUp": "Sign Up"
   },
 
   "ThemeToggle": {
@@ -56,6 +57,29 @@
     "toast": {
       "loading": "Your account is successfully created.",
       "description": "You will be redirected to the login page shortly."
+    }
+  },
+
+  "LoginForm": {
+    "title": "Welcome back!",
+    "subtitle": "Log in to your account",
+    "description": "Please enter your email and password to log in.",
+    "apiError": "Incorrect email or password. Please try again.",
+    "email": {
+      "label": "Email address",
+      "placeholder": "email.address@mail.com",
+      "error": "Please enter a valid email address"
+    },
+    "password": {
+      "label": "Password",
+      "error": "Please enter your password"
+    },
+    "submitButton": {
+      "text": "Continue"
+    },
+    "toast": {
+      "loading": "Welcome back!",
+      "description": "You will be redirected to the dashboard shortly."
     }
   }
 }
