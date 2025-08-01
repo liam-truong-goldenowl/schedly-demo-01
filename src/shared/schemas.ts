@@ -1,13 +1,7 @@
 import z from 'zod';
 
-export const WeekdaySchema = z.enum([
-  'monday',
-  'tuesday',
-  'wednesday',
-  'thursday',
-  'friday',
-  'saturday',
-  'sunday',
-]);
+import { WEEKDAYS } from './constants/day';
+
+export const WeekdaySchema = z.enum(WEEKDAYS);
 
 export type Weekday = z.infer<typeof WeekdaySchema>;
