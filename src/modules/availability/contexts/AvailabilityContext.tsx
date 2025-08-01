@@ -20,7 +20,7 @@ export function AvailabilityProvider({
 }) {
   const {
     data: schedules,
-    loading,
+    isLoading: loading,
     error,
   } = useSchedulesData(initialSchedules);
   return (

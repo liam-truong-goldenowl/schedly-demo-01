@@ -2,7 +2,7 @@ import z from 'zod';
 
 import { apiWithAuth } from '@/shared/lib/api';
 
-import { ScheduleSchema } from '../schemas';
+import { ScheduleSchema } from '../../schemas';
 
 export async function getSchedules() {
   return apiWithAuth('@get/schedules', {

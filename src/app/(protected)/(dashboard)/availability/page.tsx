@@ -1,8 +1,8 @@
 import { Heading } from '@/shared/components/layout/Heading';
 import { ActiveEvents } from '@/modules/availability/components/ActiveEvents';
-import { getSchedules } from '@/modules/availability/services/availability.api';
 import { SwitchSchedule } from '@/modules/availability/components/SwitchSchedule';
 import { ScheduleActions } from '@/modules/availability/components/ScheduleActions';
+import { getSchedules } from '@/modules/availability/services/server/availability.api';
 import { AvailabilityProvider } from '@/modules/availability/contexts/AvailabilityContext';
 
 export default async function Page() {

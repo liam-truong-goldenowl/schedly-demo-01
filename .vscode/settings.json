@@ -2,7 +2,7 @@
   "editor.codeActionsOnSave": {
     "source.fixAll.eslint": "explicit"
   },
-  "cSpell.words": ["NEXTAUTH", "Schedly"],
+  "cSpell.words": ["NEXTAUTH", "Nuqs", "Schedly"],
   "files.exclude": {
     "**/.git": true,
     "**/.svn": true,
