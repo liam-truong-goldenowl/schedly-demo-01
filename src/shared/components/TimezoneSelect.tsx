@@ -1,6 +1,7 @@
 'use client';
 
 import { VList } from 'virtua';
+import { DateTime } from 'luxon';
 import { useState } from 'react';
 import { CheckIcon, ChevronsUpDownIcon } from 'lucide-react';
 
@@ -45,7 +46,7 @@ export function TimezoneSelect({ defaultTz, onChange }: TimezoneSelectProps) {
         {selectedTz}
         <ChevronsUpDownIcon className="ml-2 size-4 shrink-0" />
       </PopoverTrigger>
-      <PopoverContent className="p-0" align="start">
+      <PopoverContent className="w-80 p-0" align="start">
         <Command>
           <CommandInput placeholder="Search..." />
           <CommandList className="max-h-[unset]">
@@ -66,6 +67,9 @@ export function TimezoneSelect({ defaultTz, onChange }: TimezoneSelectProps) {
                         )}
                       />
                       {tz}
+                      <span className="text-muted-foreground ml-auto">
+                        {DateTime.now().setZone(tz).toFormat('hh:mm')}
+                      </span>
                     </CommandItem>
                   ))}
                 </CommandGroup>
