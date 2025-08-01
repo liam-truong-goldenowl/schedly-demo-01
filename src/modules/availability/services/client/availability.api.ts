@@ -17,3 +17,9 @@ export async function getSchedules() {
     output: z.array(ScheduleSchema),
   });
 }
+
+export async function deleteSchedule(scheduleId: number) {
+  return clientApiWithAuth(`@delete/schedules/${scheduleId}`, {
+    throw: true,
+  });
+}
