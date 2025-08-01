@@ -32,7 +32,7 @@ import {
   AT_LEAST_EIGHT_CHARACTERS,
 } from '@/shared/constants/regex';
 
-import { signUp } from '../services/auth.api';
+import { signUp } from '../services/client/auth.api';
 
 import { PasswordInputWithStrength } from './PasswordInputWithStrength';
 

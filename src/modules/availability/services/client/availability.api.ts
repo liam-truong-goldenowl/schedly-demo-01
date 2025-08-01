@@ -36,3 +36,19 @@ export function updateTimezone({
     throw: true,
   });
 }
+
+export function deleteWeeklyHour({
+  scheduleId,
+  weeklyHourId,
+}: {
+  scheduleId: number;
+  weeklyHourId: number;
+}) {
+  console.log(
+    `Deleting weekly hour ${weeklyHourId} for schedule ${scheduleId}`,
+  );
+  return clientApiWithAuth(
+    `@delete/schedules/${scheduleId}/weekly-hours/${weeklyHourId}`,
+    { throw: true },
+  );
+}
