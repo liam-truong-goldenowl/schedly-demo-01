@@ -1,6 +1,6 @@
 import z from 'zod';
 
-import { api } from '@/shared/lib/api';
+import { clientApi } from '@/shared/lib/api';
 
 export async function signUp(userData: {
   name: string;
@@ -8,7 +8,7 @@ export async function signUp(userData: {
   timezone: string;
   password: string;
 }) {
-  return await api('@post/auth/sign-up', {
+  return clientApi('@post/auth/sign-up', {
     body: userData,
     output: z.object({
       name: z.string(),
@@ -19,7 +19,7 @@ export async function signUp(userData: {
 }
 
 export async function login(credentials: { email: string; password: string }) {
-  return await api('@post/auth/login', {
+  return clientApi('@post/auth/login', {
     body: credentials,
     output: z.object({
       accessToken: z.string(),
@@ -29,7 +29,7 @@ export async function login(credentials: { email: string; password: string }) {
 }
 
 export async function refresh() {
-  return await api('@post/auth/refresh', {
+  return clientApi('@post/auth/refresh', {
     output: z.object({
       accessToken: z.string(),
       refreshToken: z.string(),
