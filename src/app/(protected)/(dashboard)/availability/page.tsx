@@ -1,6 +1,7 @@
 import { Heading } from '@/shared/components/layout/Heading';
 import { SwitchSchedule } from '@/modules/availability/components/SwitchSchedule';
 import { ScheduleActions } from '@/modules/availability/components/ScheduleActions';
+import { WeeklyHoursBlock } from '@/modules/availability/components/WeeklyHoursBlock';
 import { getSchedules } from '@/modules/availability/services/server/availability.api';
 import { AvailabilityProvider } from '@/modules/availability/contexts/AvailabilityContext';
 
@@ -21,10 +22,10 @@ export default async function Page() {
             <SwitchSchedule />
             <ScheduleActions />
           </header>
-          {/* <div className="grid grid-cols-2 gap-4 px-8 py-10">
-          <div>weekly hours</div>
-          <div>date-specific hours</div>
-          </div> */}
+          <div className="grid grid-cols-2 gap-4 px-8 py-10">
+            <WeeklyHoursBlock />
+            <div>date-specific hours</div>
+          </div>
         </section>
       </AvailabilityProvider>
     </main>
