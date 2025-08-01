@@ -1,6 +1,11 @@
 export type { AuthOptions } from 'next-auth';
 
 declare module 'next-auth' {
+  export interface BackendJWT {
+    accessToken: string;
+    refreshToken: string;
+  }
+
   export interface UserObject {
     id: number;
     email: string;

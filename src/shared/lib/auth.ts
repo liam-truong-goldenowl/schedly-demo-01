@@ -1,12 +1,11 @@
 import { jwtDecode } from 'jwt-decode';
-import { redirect } from 'next/navigation';
 import CredentialsProvider from 'next-auth/providers/credentials';
 
 import type { JWT } from 'next-auth/jwt';
 import type { UserObject, AuthOptions } from 'next-auth';
 
 import { env } from '@/shared/lib/env';
-import { login, refresh } from '@/modules/auth/services/auth.api';
+import { login, refresh } from '@/modules/auth/services/server/auth.api';
 
 type DecodedJWT = UserObject & {
   exp: number;
@@ -14,10 +13,12 @@ type DecodedJWT = UserObject & {
 };
 
 async function refreshTokens(nextAuthJWTCookie: JWT): Promise<JWT> {
-  const { data, error } = await refresh();
+  const { data, error } = await refresh(
+    nextAuthJWTCookie.data.tokens.refreshToken,
+  );
 
   if (error) {
-    redirect('/login');
+    throw new Error('Failed to refresh tokens');
   }
 
   nextAuthJWTCookie.data.tokens.accessToken = data.accessToken;
@@ -44,7 +45,6 @@ export const authOptions: AuthOptions = {
         if (!credentials) return null;
 
         const { data: tokens, error } = await login(credentials);
-        console.debug('Error logging in', credentials);
 
         // TODO: Handle error properly
         if (error) {

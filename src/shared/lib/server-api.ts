@@ -5,7 +5,7 @@ import { createFetch } from '@better-fetch/fetch';
 import { env } from './env';
 import { authOptions } from './auth';
 
-export const clientApi = createFetch({
+export const serverApi = createFetch({
   baseURL: env.NEXT_PUBLIC_API_URL,
 });
 
