@@ -23,3 +23,16 @@ export async function deleteSchedule(scheduleId: number) {
     throw: true,
   });
 }
+
+export function updateTimezone({
+  timezone,
+  scheduleId,
+}: {
+  timezone: string;
+  scheduleId: number;
+}) {
+  return clientApiWithAuth(`@patch/schedules/${scheduleId}`, {
+    body: { timezone },
+    throw: true,
+  });
+}

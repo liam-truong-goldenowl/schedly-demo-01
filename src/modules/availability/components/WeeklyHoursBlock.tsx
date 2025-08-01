@@ -1,5 +1,6 @@
 'use client';
 
+import { toast } from 'sonner';
 import { RepeatIcon } from 'lucide-react';
 
 import { WEEKDAYS } from '@/shared/constants/day';
@@ -9,6 +10,7 @@ import { Description } from '@/shared/components/layout/Description';
 
 import { useActiveSchedule } from '../hooks/useActiveSchedule';
 import { useAvailability } from '../contexts/AvailabilityContext';
+import { useScheduleMutations } from '../hooks/useScheduleMutations';
 
 import { DayInterval } from './DayInterval';
 import { DayIndicator } from './DayIndicator';
@@ -17,12 +19,18 @@ import { AddDayIntervalButton } from './AddDayIntervalButton';
 export function WeeklyHoursBlock() {
   const { schedules } = useAvailability();
   const { activeScheduleId } = useActiveSchedule();
+  const { updateTimezone } = useScheduleMutations();
 
   const defaultSchedule =
     schedules.find((schedule) => schedule.isDefault) ?? schedules[0];
   const activeSchedule =
     schedules.find((schedule) => schedule.id === activeScheduleId) ??
     defaultSchedule;
+
+  async function handleTimezoneChange(timezone: string) {
+    await updateTimezone({ scheduleId: activeSchedule.id, timezone });
+    toast.success('Saved');
+  }
 
   return (
     <section className="space-y-6">
@@ -49,6 +57,7 @@ export function WeeklyHoursBlock() {
       <TimezoneSelect
         key={activeScheduleId}
         defaultTz={activeSchedule.timezone}
+        onChange={handleTimezoneChange}
       />
     </section>
   );
