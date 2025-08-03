@@ -24,5 +24,3 @@ export const serverApiWithAuth = createFetch({
     return context;
   },
 });
-
-export const apiWithAuth = serverApiWithAuth;
