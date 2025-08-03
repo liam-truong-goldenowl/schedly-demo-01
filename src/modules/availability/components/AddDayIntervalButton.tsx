@@ -5,6 +5,7 @@ import { CirclePlusIcon } from 'lucide-react';
 import { Weekday } from '@/shared/schemas';
 import { toTitleCase } from '@/shared/lib/utils';
 import { Button } from '@/shared/components/ui/button';
+import { findAvailableSlots } from '@/shared/lib/time';
 import {
   Tooltip,
   TooltipContent,
@@ -19,14 +20,34 @@ interface AddDayIntervalButtonProps {
 }
 
 export function AddDayIntervalButton({ day }: AddDayIntervalButtonProps) {
-  const { activeScheduleId } = useActiveSchedule();
+  const { activeScheduleId, activeSchedule } = useActiveSchedule();
   const { createWeeklyHour } = useScheduleMutations();
 
+  const currentWeeklyHours = activeSchedule.weeklyHours
+    .filter((wh) => wh.weekday === day)
+    .map((wh) => ({
+      startTime: wh.startTime,
+      endTime: wh.endTime,
+    }));
+
+  const availableIntervals = findAvailableSlots(currentWeeklyHours);
+
+  const { startTime, endTime } = availableIntervals[0] ?? {
+    startTime: '09:00',
+    endTime: '17:00',
+  };
+
+  const defaultStartTime = currentWeeklyHours.length ? startTime : '09:00';
+  const defaultEndTime = currentWeeklyHours.length ? endTime : '17:00';
+
   async function handleAdd() {
-    console.debug('Adding new interval for', day);
     await createWeeklyHour({
       scheduleId: activeScheduleId,
-      body: { weekday: day, startTime: '09:00', endTime: '17:00' },
+      body: {
+        weekday: day,
+        startTime: defaultStartTime,
+        endTime: defaultEndTime,
+      },
     });
   }
 
@@ -38,6 +59,7 @@ export function AddDayIntervalButton({ day }: AddDayIntervalButtonProps) {
           variant="ghost"
           className="size-9"
           onClick={handleAdd}
+          disabled={availableIntervals.length == 0}
         >
           <CirclePlusIcon />
         </Button>

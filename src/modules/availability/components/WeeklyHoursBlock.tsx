@@ -1,6 +1,5 @@
 'use client';
 
-import { toast } from 'sonner';
 import { RepeatIcon } from 'lucide-react';
 
 import { WEEKDAYS } from '@/shared/constants/day';
@@ -29,7 +28,6 @@ export function WeeklyHoursBlock() {
 
   async function handleTimezoneChange(timezone: string) {
     await updateTimezone({ scheduleId: activeSchedule.id, timezone });
-    toast.success('Saved');
   }
 
   return (
