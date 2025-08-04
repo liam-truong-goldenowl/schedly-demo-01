@@ -9,6 +9,7 @@ import {
   createWeeklyHour,
   updateWeeklyHour,
   createDateOverride,
+  deleteDateOverride,
 } from '../services/client/availability.api';
 
 import { useActiveSchedule } from './useActiveSchedule';
@@ -165,15 +166,70 @@ export function useScheduleMutations() {
 
       const currentSchedules = queryClient.getQueryData(['schedules']);
 
+      const newDateOverrides =
+        body.intervals.length > 0
+          ? body.dates.flatMap((date, index) =>
+              body.intervals.map((interval) => ({
+                date,
+                startTime: `${interval.startTime}:00`,
+                endTime: `${interval.endTime}:00`,
+                id: Date.now() + index, // Temporary ID for optimistic update
+              })),
+            )
+          : body.dates.map((date) => ({
+              date,
+              startTime: null,
+              endTime: null,
+              id: Date.now(), // Temporary ID for optimistic update
+            }));
+
+      queryClient.setQueryData(['schedules'], (old: Schedule[]) => {
+        const currentSchedule = old.find(
+          (schedule) => schedule.id === scheduleId,
+        );
+        if (!currentSchedule) return old;
+
+        const existingOverrides = (currentSchedule.dateOverrides || []).filter(
+          (override) =>
+            !newDateOverrides.some((newOverride) =>
+              override.date.includes(newOverride.date),
+            ),
+        );
+
+        const mergedOverrides = [...existingOverrides, ...newDateOverrides];
+
+        return old.map((schedule) =>
+          schedule.id === scheduleId
+            ? { ...schedule, dateOverrides: mergedOverrides }
+            : schedule,
+        );
+      });
+
+      return { currentSchedules };
+    },
+    onError: (err, variables, context) => {
+      queryClient.setQueryData(['schedules'], context?.currentSchedules);
+    },
+    onSettled: () => {
+      queryClient.invalidateQueries({ queryKey: ['schedules'] });
+    },
+  });
+
+  const deleteDateOverrideMutation = useMutation({
+    mutationFn: deleteDateOverride,
+    onMutate: async ({ scheduleId, dateOverrideId }) => {
+      await queryClient.cancelQueries({ queryKey: ['schedules'] });
+
+      const currentSchedules = queryClient.getQueryData(['schedules']);
+
       queryClient.setQueryData(['schedules'], (old: Schedule[]) =>
         old.map((schedule) =>
           schedule.id === scheduleId
             ? {
                 ...schedule,
-                dateOverrides: [
-                  ...schedule.dateOverrides,
-                  { ...body, id: Date.now() },
-                ],
+                dateOverrides: schedule.dateOverrides.filter(
+                  (override) => override.id !== dateOverrideId,
+                ),
               }
             : schedule,
         ),
@@ -204,5 +260,7 @@ export function useScheduleMutations() {
     isUpdatingWeeklyHour: updateWeeklyHourMutation.isPending,
     createDateOverride: createDateOverrideMutation.mutateAsync,
     isCreatingDateOverride: createDateOverrideMutation.isPending,
+    deleteDateOverride: deleteDateOverrideMutation.mutateAsync,
+    isDeletingDateOverride: deleteDateOverrideMutation.isPending,
   };
 }

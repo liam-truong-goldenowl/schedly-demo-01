@@ -1,3 +1,4 @@
+import { DateTime } from 'luxon';
 import { twMerge } from 'tailwind-merge';
 import { clsx, type ClassValue } from 'clsx';
 
@@ -31,4 +32,14 @@ export function toTitleCase(str: string): string {
     .split(' ')
     .map((word) => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
     .join(' ');
+}
+
+/**
+ * Formats a time string from 'HH:mm:ss' to 'HH:mm'.
+ *
+ * @param timeString - The time string in 'HH:mm:ss' format.
+ * @returns The formatted time string in 'HH:mm' format.
+ */
+export function formatTime(timeString: string): string {
+  return DateTime.fromFormat(timeString, 'HH:mm:ss').toFormat('HH:mm a');
 }

@@ -95,7 +95,7 @@ export function createDateOverride({
   scheduleId: number;
   body: {
     intervals: { startTime: string; endTime: string }[];
-    dates: Date[];
+    dates: string[];
   };
 }) {
   return clientApiWithAuth(`@post/schedules/${scheduleId}/date-overrides`, {
@@ -103,4 +103,17 @@ export function createDateOverride({
     output: z.array(DateOverrideSchema),
     throw: true,
   });
+}
+
+export function deleteDateOverride({
+  scheduleId,
+  dateOverrideId,
+}: {
+  scheduleId: number;
+  dateOverrideId: number;
+}) {
+  return clientApiWithAuth(
+    `@delete/schedules/${scheduleId}/date-overrides/${dateOverrideId}`,
+    { throw: true },
+  );
 }

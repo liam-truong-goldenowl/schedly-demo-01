@@ -13,6 +13,7 @@ interface TimeIntervalInputProps {
   defaultEndTime?: string;
   defaultStartTime?: string;
   isDirtyDisabled?: boolean;
+  isEditable?: boolean;
   onReset?: () => void;
   onRemove?: () => void;
   onEndTimeChange?: (endTime: string) => void;
@@ -25,6 +26,7 @@ export function TimeIntervalInput({
   defaultStartTime,
   isInvalid = false,
   isDirtyDisabled = false,
+  isEditable = true,
   onSave = () => {},
   onReset = () => {},
   onRemove = () => {},
@@ -86,6 +88,7 @@ export function TimeIntervalInput({
           className={cn('pe-0', isInvalid && 'border-red-500')}
           value={interval.startTime}
           onChange={handleStartTimeChange}
+          disabled={!isEditable}
         />
         <MinusIcon />
         <Input
@@ -93,6 +96,7 @@ export function TimeIntervalInput({
           className={cn('pe-0', isInvalid && 'border-red-500')}
           value={interval.endTime}
           onChange={handleEndTimeChange}
+          disabled={!isEditable}
         />
       </div>
       {isDirty ? (
