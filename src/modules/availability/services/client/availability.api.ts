@@ -64,3 +64,22 @@ export function createWeeklyHour({
     throw: true,
   });
 }
+
+export function updateWeeklyHour({
+  scheduleId,
+  weeklyHourId,
+  body,
+}: {
+  scheduleId: number;
+  weeklyHourId: number;
+  body: { startTime: string; endTime: string };
+}) {
+  return clientApiWithAuth(
+    `@patch/schedules/${scheduleId}/weekly-hours/${weeklyHourId}`,
+    {
+      body,
+      output: WeeklyHourSchema,
+      throw: true,
+    },
+  );
+}

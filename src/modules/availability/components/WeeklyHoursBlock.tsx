@@ -11,8 +11,8 @@ import { useActiveSchedule } from '../hooks/useActiveSchedule';
 import { useAvailability } from '../contexts/AvailabilityContext';
 import { useScheduleMutations } from '../hooks/useScheduleMutations';
 
-import { DayInterval } from './DayInterval';
 import { DayIndicator } from './DayIndicator';
+import { DayIntervalList } from './DayIntervalList';
 import { AddDayIntervalButton } from './AddDayIntervalButton';
 
 export function WeeklyHoursBlock() {
@@ -46,7 +46,10 @@ export function WeeklyHoursBlock() {
         {WEEKDAYS.map((day) => (
           <li key={day} className="flex items-start gap-4">
             <DayIndicator day={day} />
-            <DayInterval day={day} weeklyHours={activeSchedule.weeklyHours} />
+            <DayIntervalList
+              day={day}
+              weeklyHours={activeSchedule.weeklyHours}
+            />
             <AddDayIntervalButton day={day} />
           </li>
         ))}

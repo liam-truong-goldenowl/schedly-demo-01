@@ -85,3 +85,17 @@ export function getTimeRangeBounds(
     latest: latest.toFormat(FORMAT),
   };
 }
+
+export function isOverlapping(
+  interval1: TimeInterval,
+  interval2: TimeInterval,
+): boolean {
+  return (
+    interval1.startTime < interval2.endTime &&
+    interval2.startTime < interval1.endTime
+  );
+}
+
+export function isBefore(time1: string, time2: string): boolean {
+  return time1 < time2;
+}
