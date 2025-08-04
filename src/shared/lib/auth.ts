@@ -12,24 +12,8 @@ type DecodedJWT = UserObject & {
   iat: number;
 };
 
-async function refreshTokens(nextAuthJWTCookie: JWT): Promise<JWT> {
-  const { data, error } = await refresh(
-    nextAuthJWTCookie.data.tokens.refreshToken,
-  );
-
-  if (error) {
-    throw new Error('Failed to refresh tokens');
-  }
-
-  nextAuthJWTCookie.data.tokens.accessToken = data.accessToken;
-  nextAuthJWTCookie.data.tokens.refreshToken = data.refreshToken;
-
-  return nextAuthJWTCookie;
-}
-
 export const authOptions: AuthOptions = {
   secret: env.NEXTAUTH_SECRET,
-
   session: { strategy: 'jwt' },
   pages: {
     signIn: '/login',
@@ -46,9 +30,8 @@ export const authOptions: AuthOptions = {
 
         const { data: tokens, error } = await login(credentials);
 
-        // TODO: Handle error properly
         if (error) {
-          throw new Error('WrongCredentials');
+          throw new Error('Wrong Credentials');
         }
 
         const accessTokenPayload = jwtDecode<DecodedJWT>(tokens!.accessToken);
@@ -70,19 +53,26 @@ export const authOptions: AuthOptions = {
       const isInitialSignIn = user && account;
 
       if (isInitialSignIn) {
-        return { ...token, data: user, error: null };
+        return { ...token, data: user };
       }
 
       const accessTokenPayload = jwtDecode<DecodedJWT>(
         token.data.tokens.accessToken,
       );
-      const accessTokenStillValid = Date.now() < accessTokenPayload.exp * 1_000;
+      const accessTokenExpired = Date.now() > accessTokenPayload.exp * 1_000;
 
-      if (accessTokenStillValid) {
-        return token;
+      if (accessTokenExpired) {
+        const { data, error } = await refresh(token.data.tokens.refreshToken);
+
+        if (error) {
+          throw new Error('Failed to refresh tokens');
+        }
+
+        token.data.tokens.accessToken = data.accessToken;
+        token.data.tokens.refreshToken = data.refreshToken;
       }
 
-      return refreshTokens(token);
+      return token;
     },
 
     async session({ session, token }) {
