@@ -4,6 +4,7 @@ import { RepeatIcon } from 'lucide-react';
 
 import { WEEKDAYS } from '@/shared/constants/day';
 import { Heading } from '@/shared/components/layout/Heading';
+import { DayIndicator } from '@/shared/components/DayIndicator';
 import { TimezoneSelect } from '@/shared/components/TimezoneSelect';
 import { Description } from '@/shared/components/layout/Description';
 
@@ -11,7 +12,6 @@ import { useActiveSchedule } from '../hooks/useActiveSchedule';
 import { useAvailability } from '../contexts/AvailabilityContext';
 import { useScheduleMutations } from '../hooks/useScheduleMutations';
 
-import { DayIndicator } from './DayIndicator';
 import { DayIntervalList } from './DayIntervalList';
 import { AddDayIntervalButton } from './AddDayIntervalButton';
 
