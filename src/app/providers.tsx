@@ -21,7 +21,7 @@ export function Providers({ children }: { children: React.ReactNode }) {
           </NuqsAdapter>
         </AuthProvider>
       </NextIntlClientProvider>
-      <Toaster position="top-center" closeButton richColors />
+      <Toaster position="top-center" richColors />
     </ThemeProvider>
   );
 }

@@ -4,6 +4,7 @@ import { Schedule } from '../schemas';
 import {
   createSchedule,
   deleteSchedule,
+  updateTimezone,
 } from '../services/client/availability.api';
 
 import { useActiveSchedule } from './useActiveSchedule';
@@ -32,7 +33,7 @@ export function useScheduleMutations() {
 
       return { currentSchedules };
     },
-    onError: (err, teamId, context) => {
+    onError: (err, variables, context) => {
       queryClient.setQueryData(['schedules'], context?.currentSchedules);
     },
     onSettled: () => {
@@ -41,10 +42,35 @@ export function useScheduleMutations() {
     },
   });
 
+  const updateTimezoneMutation = useMutation({
+    mutationFn: updateTimezone,
+    onMutate: async ({ scheduleId, timezone }) => {
+      await queryClient.cancelQueries({ queryKey: ['schedules'] });
+
+      const currentSchedules = queryClient.getQueryData(['schedules']);
+
+      queryClient.setQueryData(['schedules'], (old: Schedule[]) =>
+        old.map((schedule) =>
+          schedule.id === scheduleId ? { ...schedule, timezone } : schedule,
+        ),
+      );
+
+      return { currentSchedules };
+    },
+    onError: (err, variables, context) => {
+      queryClient.setQueryData(['schedules'], context?.currentSchedules);
+    },
+    onSettled: () => {
+      queryClient.invalidateQueries({ queryKey: ['schedules'] });
+    },
+  });
+
   return {
     createSchedule: createScheduleMutation.mutateAsync,
     isCreating: createScheduleMutation.isPending,
     deleteSchedule: deleteScheduleMutation.mutateAsync,
     isDeleting: deleteScheduleMutation.isPending,
+    updateTimezone: updateTimezoneMutation.mutateAsync,
+    isUpdatingTimezone: updateTimezoneMutation.isPending,
   };
 }
