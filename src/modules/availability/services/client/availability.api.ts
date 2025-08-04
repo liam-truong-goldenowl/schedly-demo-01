@@ -1,8 +1,9 @@
 import z from 'zod';
 
+import { Weekday } from '@/shared/schemas';
 import { clientApiWithAuth } from '@/shared/lib/client-api';
 
-import { ScheduleSchema } from '../../schemas';
+import { ScheduleSchema, WeeklyHourSchema } from '../../schemas';
 
 export async function createSchedule(body: { name: string; timezone: string }) {
   return clientApiWithAuth('@post/schedules', {
@@ -44,11 +45,22 @@ export function deleteWeeklyHour({
   scheduleId: number;
   weeklyHourId: number;
 }) {
-  console.log(
-    `Deleting weekly hour ${weeklyHourId} for schedule ${scheduleId}`,
-  );
   return clientApiWithAuth(
     `@delete/schedules/${scheduleId}/weekly-hours/${weeklyHourId}`,
     { throw: true },
   );
+}
+
+export function createWeeklyHour({
+  scheduleId,
+  body,
+}: {
+  scheduleId: number;
+  body: { weekday: Weekday; startTime: string; endTime: string };
+}) {
+  return clientApiWithAuth(`@post/schedules/${scheduleId}/weekly-hours`, {
+    body,
+    output: WeeklyHourSchema,
+    throw: true,
+  });
 }

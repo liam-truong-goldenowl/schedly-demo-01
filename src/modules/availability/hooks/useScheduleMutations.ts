@@ -6,6 +6,7 @@ import {
   deleteSchedule,
   updateTimezone,
   deleteWeeklyHour,
+  createWeeklyHour,
 } from '../services/client/availability.api';
 
 import { useActiveSchedule } from './useActiveSchedule';
@@ -96,6 +97,37 @@ export function useScheduleMutations() {
     },
   });
 
+  const createWeeklyHourMutation = useMutation({
+    mutationFn: createWeeklyHour,
+    onMutate: async ({ scheduleId, body }) => {
+      await queryClient.cancelQueries({ queryKey: ['schedules'] });
+
+      const currentSchedules = queryClient.getQueryData(['schedules']);
+
+      queryClient.setQueryData(['schedules'], (old: Schedule[]) =>
+        old.map((schedule) =>
+          schedule.id === scheduleId
+            ? {
+                ...schedule,
+                weeklyHours: [
+                  ...schedule.weeklyHours,
+                  { ...body, id: Date.now() }, // Temporary ID for optimistic update
+                ],
+              }
+            : schedule,
+        ),
+      );
+
+      return { currentSchedules };
+    },
+    onError: (err, variables, context) => {
+      queryClient.setQueryData(['schedules'], context?.currentSchedules);
+    },
+    onSettled: () => {
+      queryClient.invalidateQueries({ queryKey: ['schedules'] });
+    },
+  });
+
   return {
     createSchedule: createScheduleMutation.mutateAsync,
     isCreating: createScheduleMutation.isPending,
@@ -105,5 +137,7 @@ export function useScheduleMutations() {
     isUpdatingTimezone: updateTimezoneMutation.isPending,
     deleteWeeklyHour: deleteWeeklyHourMutation.mutateAsync,
     isDeletingWeeklyHour: deleteWeeklyHourMutation.isPending,
+    createWeeklyHour: createWeeklyHourMutation.mutateAsync,
+    isCreatingWeeklyHour: createWeeklyHourMutation.isPending,
   };
 }
