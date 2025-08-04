@@ -8,6 +8,7 @@ import {
   deleteWeeklyHour,
   createWeeklyHour,
   updateWeeklyHour,
+  createDateOverride,
 } from '../services/client/availability.api';
 
 import { useActiveSchedule } from './useActiveSchedule';
@@ -157,6 +158,37 @@ export function useScheduleMutations() {
     },
   });
 
+  const createDateOverrideMutation = useMutation({
+    mutationFn: createDateOverride,
+    onMutate: async ({ scheduleId, body }) => {
+      await queryClient.cancelQueries({ queryKey: ['schedules'] });
+
+      const currentSchedules = queryClient.getQueryData(['schedules']);
+
+      queryClient.setQueryData(['schedules'], (old: Schedule[]) =>
+        old.map((schedule) =>
+          schedule.id === scheduleId
+            ? {
+                ...schedule,
+                dateOverrides: [
+                  ...schedule.dateOverrides,
+                  { ...body, id: Date.now() },
+                ],
+              }
+            : schedule,
+        ),
+      );
+
+      return { currentSchedules };
+    },
+    onError: (err, variables, context) => {
+      queryClient.setQueryData(['schedules'], context?.currentSchedules);
+    },
+    onSettled: () => {
+      queryClient.invalidateQueries({ queryKey: ['schedules'] });
+    },
+  });
+
   return {
     createSchedule: createScheduleMutation.mutateAsync,
     isCreating: createScheduleMutation.isPending,
@@ -170,5 +202,7 @@ export function useScheduleMutations() {
     isCreatingWeeklyHour: createWeeklyHourMutation.isPending,
     updateWeeklyHour: updateWeeklyHourMutation.mutateAsync,
     isUpdatingWeeklyHour: updateWeeklyHourMutation.isPending,
+    createDateOverride: createDateOverrideMutation.mutateAsync,
+    isCreatingDateOverride: createDateOverrideMutation.isPending,
   };
 }

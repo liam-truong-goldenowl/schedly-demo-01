@@ -3,7 +3,11 @@ import z from 'zod';
 import { Weekday } from '@/shared/schemas';
 import { clientApiWithAuth } from '@/shared/lib/client-api';
 
-import { ScheduleSchema, WeeklyHourSchema } from '../../schemas';
+import {
+  ScheduleSchema,
+  WeeklyHourSchema,
+  DateOverrideSchema,
+} from '../../schemas';
 
 export async function createSchedule(body: { name: string; timezone: string }) {
   return clientApiWithAuth('@post/schedules', {
@@ -82,4 +86,21 @@ export function updateWeeklyHour({
       throw: true,
     },
   );
+}
+
+export function createDateOverride({
+  scheduleId,
+  body,
+}: {
+  scheduleId: number;
+  body: {
+    intervals: { startTime: string; endTime: string }[];
+    dates: Date[];
+  };
+}) {
+  return clientApiWithAuth(`@post/schedules/${scheduleId}/date-overrides`, {
+    body,
+    output: z.array(DateOverrideSchema),
+    throw: true,
+  });
 }

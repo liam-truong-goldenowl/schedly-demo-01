@@ -12,6 +12,7 @@ interface TimeIntervalInputProps {
   isInvalid?: boolean;
   defaultEndTime?: string;
   defaultStartTime?: string;
+  isDirtyDisabled?: boolean;
   onReset?: () => void;
   onRemove?: () => void;
   onEndTimeChange?: (endTime: string) => void;
@@ -23,6 +24,7 @@ export function TimeIntervalInput({
   defaultEndTime,
   defaultStartTime,
   isInvalid = false,
+  isDirtyDisabled = false,
   onSave = () => {},
   onReset = () => {},
   onRemove = () => {},
@@ -39,11 +41,11 @@ export function TimeIntervalInput({
     endTime: defaultTimeRef.current.endTime,
   });
 
-  const isDirty =
-    interval.startTime !== defaultTimeRef.current.startTime ||
-    interval.endTime !== defaultTimeRef.current.endTime;
-
   const isSaveDisabled = isInvalid;
+  const isDirty =
+    !isDirtyDisabled &&
+    (interval.startTime !== defaultTimeRef.current.startTime ||
+      interval.endTime !== defaultTimeRef.current.endTime);
 
   const handleStartTimeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setInterval((prev) => ({ ...prev, startTime: e.target.value }));
