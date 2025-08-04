@@ -5,8 +5,8 @@ import { WeekdaySchema } from '@/shared/schemas';
 export const DateOverrideSchema = z.object({
   id: z.number(),
   date: z.string(),
-  startTime: z.string(),
-  endTime: z.string(),
+  startTime: z.string().nullable(),
+  endTime: z.string().nullable(),
 });
 
 export const WeeklyHourSchema = z.object({

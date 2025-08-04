@@ -7,10 +7,11 @@ import { Description } from '@/shared/components/layout/Description';
 
 import { useActiveSchedule } from '../hooks/useActiveSchedule';
 
+import { OverriddenDateList } from './OverriddenDateList';
 import { AddDateOverrideButton } from './AddDateOverrideButton';
 
 export function DateOverridesBlock() {
-  const { activeScheduleId } = useActiveSchedule();
+  const { activeScheduleId, activeSchedule } = useActiveSchedule();
 
   return (
     <section className="space-y-6">
@@ -27,13 +28,7 @@ export function DateOverridesBlock() {
         </div>
         <AddDateOverrideButton key={activeScheduleId} />
       </header>
-      <ul>
-        <li>1</li>
-        <li>2</li>
-        <li>3</li>
-        <li>4</li>
-        <li>5</li>
-      </ul>
+      <OverriddenDateList overriddenDates={activeSchedule.dateOverrides} />
     </section>
   );
 }
