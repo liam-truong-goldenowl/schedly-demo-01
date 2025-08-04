@@ -12,13 +12,16 @@ export function useActiveSchedule() {
   const { schedules } = useAvailability();
 
   const defaultSchedule = schedules.find((s) => s.isDefault) || schedules[0];
+  const activeSchedule =
+    schedules.find((s) => s.id === activeScheduleId) || defaultSchedule;
 
   const checkActive = (scheduleId: number | null) =>
     scheduleId === activeScheduleId;
 
   return {
     checkActive,
-    activeScheduleId: activeScheduleId ?? defaultSchedule.id,
+    activeSchedule,
+    activeScheduleId: activeSchedule.id,
     setActiveScheduleId,
   };
 }
