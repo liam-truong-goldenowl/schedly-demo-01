@@ -1,5 +1,4 @@
 import { Heading } from '@/shared/components/layout/Heading';
-import { ActiveEvents } from '@/modules/availability/components/ActiveEvents';
 import { SwitchSchedule } from '@/modules/availability/components/SwitchSchedule';
 import { ScheduleActions } from '@/modules/availability/components/ScheduleActions';
 import { getSchedules } from '@/modules/availability/services/server/availability.api';
@@ -19,10 +18,7 @@ export default async function Page() {
       <AvailabilityProvider initialSchedules={data}>
         <section className="bg-background rounded-lg border">
           <header className="items flex items-center justify-between border-b px-8 py-10">
-            <div>
-              <SwitchSchedule />
-              <ActiveEvents />
-            </div>
+            <SwitchSchedule />
             <ScheduleActions />
           </header>
           {/* <div className="grid grid-cols-2 gap-4 px-8 py-10">
