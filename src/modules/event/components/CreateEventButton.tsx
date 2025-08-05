@@ -29,7 +29,7 @@ const options = [
   },
 ];
 
-export function CreateEvent() {
+export function CreateEventButton() {
   return (
     <div>
       <DropdownMenu>
