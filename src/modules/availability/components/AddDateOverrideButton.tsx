@@ -1,5 +1,6 @@
 'use client';
 
+import { DateTime } from 'luxon';
 import { PlusIcon } from 'lucide-react';
 import { useRef, useState } from 'react';
 
@@ -83,7 +84,7 @@ export function AddDateOverrideButton() {
       scheduleId: activeScheduleId,
       body: {
         intervals: intervalsArray,
-        dates: date.map((d) => new Date(d)),
+        dates: date.map((d) => DateTime.fromJSDate(d).toFormat('yyyy-MM-dd')),
       },
     });
 
@@ -164,6 +165,7 @@ export function AddDateOverrideButton() {
           selected={date}
           onSelect={setDate}
           className="mx-auto rounded-md border p-2"
+          disabled={{ before: new Date() }}
         />
 
         {date && date.length > 0 ? (
