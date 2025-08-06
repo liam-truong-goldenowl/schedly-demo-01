@@ -338,15 +338,15 @@ export function CreateEventForm() {
                     </span>
                   </div>
                   <ul className="text-muted-foreground flex flex-wrap gap-2">
-                    {[2, 4, 5, 6, 10, 20].map((duration) => (
-                      <li key={duration}>
+                    {[2, 4, 5, 6, 10, 20].map((inviteeCount) => (
+                      <li key={inviteeCount}>
                         <button
                           type="button"
                           disabled={isCreatingEvent}
-                          onClick={() => field.onChange(duration)}
+                          onClick={() => field.onChange(inviteeCount)}
                           className="text-copy-14 hover:bg-accent hover:text-accent-foreground cursor-pointer rounded-full border px-4 py-1"
                         >
-                          {duration}
+                          {inviteeCount}
                         </button>
                       </li>
                     ))}
