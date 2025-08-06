@@ -10,10 +10,15 @@ export function useSchedulesData() {
       if (error) {
         return [];
       }
+      // Move the default schedule to the first position
+      const sorted = data.toSorted(
+        (a, b) => (b.isDefault ? 1 : 0) - (a.isDefault ? 1 : 0),
+      );
 
-      return data.map((schedule) => ({
+      return sorted.map((schedule) => ({
         id: schedule.id,
         name: schedule.name,
+        isDefault: schedule.isDefault,
       }));
     },
   });

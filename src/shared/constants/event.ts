@@ -1,10 +1,10 @@
 export enum EventType {
-  ONE_ON_ONE = 'one-on-one',
+  ONE_ON_ONE = 'one_on_one',
   GROUP = 'group',
 }
 
-export enum LocationType {
-  IN_PERSON = 'in-person',
-  PHONE = 'phone',
-  ONLINE = 'online',
-}
+export const LocationType = {
+  IN_PERSON: 'in_person',
+  PHONE: 'phone',
+  ONLINE: 'online',
+};
