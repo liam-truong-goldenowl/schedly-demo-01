@@ -28,7 +28,7 @@ import {
   FormDescription,
 } from '@/shared/components/ui/form';
 
-import { useSchedulesData } from '../hooks/useSchedulesData';
+import { useSchedulesQuery } from '../hooks/useSchedulesQuery';
 import { useEventTypeParam } from '../hooks/useEventTypeParam';
 import { useEventMutations } from '../hooks/useEventMutations';
 
@@ -56,7 +56,7 @@ const formSchema = z.object({
 export function CreateEventForm() {
   const router = useRouter();
   const { eventType } = useEventTypeParam();
-  const { isLoading, data: schedules } = useSchedulesData();
+  const { isLoading, data: schedules } = useSchedulesQuery();
   const { createEvent, isCreatingEvent } = useEventMutations();
 
   const [scheduleId, setScheduleId] = useState<number | undefined>();

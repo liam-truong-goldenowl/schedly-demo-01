@@ -168,12 +168,12 @@ export function useScheduleMutations() {
 
       const newDateOverrides =
         body.intervals.length > 0
-          ? body.dates.flatMap((date, index) =>
-              body.intervals.map((interval) => ({
+          ? body.dates.flatMap((date, dateIndex) =>
+              body.intervals.map((interval, intervalIndex) => ({
                 date,
                 startTime: `${interval.startTime}:00`,
                 endTime: `${interval.endTime}:00`,
-                id: Date.now() + index, // Temporary ID for optimistic update
+                id: Date.now() + dateIndex + intervalIndex, // Temporary ID for optimistic update
               })),
             )
           : body.dates.map((date) => ({

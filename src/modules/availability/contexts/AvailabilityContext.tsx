@@ -3,7 +3,7 @@
 import { use, createContext } from 'react';
 
 import { Schedule } from '../schemas';
-import { useSchedulesData } from '../hooks/useSchedulesData';
+import { useSchedulesQuery } from '../hooks/useSchedulesQuery';
 
 const AvailabilityContext = createContext({
   schedules: [] as Schedule[],
@@ -22,7 +22,7 @@ export function AvailabilityProvider({
     data: schedules,
     isLoading: loading,
     error,
-  } = useSchedulesData(initialSchedules);
+  } = useSchedulesQuery(initialSchedules);
   return (
     <AvailabilityContext.Provider value={{ schedules, loading, error }}>
       {children}

@@ -20,6 +20,7 @@ export async function createSchedule(body: { name: string; timezone: string }) {
 export async function getSchedules() {
   return clientApiWithAuth('@get/schedules', {
     output: z.array(ScheduleSchema),
+    throw: true,
   });
 }
 
