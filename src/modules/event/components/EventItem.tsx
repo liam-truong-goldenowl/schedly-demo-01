@@ -11,6 +11,8 @@ import {
   DropdownMenuTrigger,
 } from '@/shared/components/ui/dropdown-menu';
 
+import { useSchedulesQuery } from '../hooks/useSchedulesQuery';
+
 type EventItemProps = {
   event: {
     id: number;
@@ -22,6 +24,8 @@ type EventItemProps = {
 };
 
 export function EventItem(props: EventItemProps) {
+  const {} = useSchedulesQuery();
+
   return (
     <article className="flex items-center justify-between gap-4 rounded-lg border border-s-8 bg-white p-4 ps-5">
       <section className="space-y-2">
