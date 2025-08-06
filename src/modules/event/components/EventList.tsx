@@ -5,6 +5,7 @@ import { ChevronsDownIcon } from 'lucide-react';
 import { Skeleton } from '@/shared/components/ui/skeleton';
 
 import { useEvents } from '../hooks/useEvents';
+import { useSchedulesQuery } from '../hooks/useSchedulesQuery';
 import {
   EVENT_ITEMS_COUNT,
   INITIAL_FALLBACK_ITEMS_COUNT,
@@ -15,13 +16,16 @@ import { EventItem, EventItemFallback } from './EventItem';
 
 export function EventList() {
   const {
-    isLoading,
-    isFetchingNextPage,
     data,
     error,
     hasNextPage,
     fetchNextPage,
+    isFetchingNextPage,
+    isLoading: isLoadingEvents,
   } = useEvents();
+  const { isLoading: isLoadingSchedules } = useSchedulesQuery();
+
+  const isLoading = isLoadingEvents || isLoadingSchedules;
 
   if (isLoading) {
     return (

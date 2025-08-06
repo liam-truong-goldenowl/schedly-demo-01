@@ -1,3 +1,4 @@
+import Link from 'next/link';
 import { ClockIcon, EllipsisVerticalIcon } from 'lucide-react';
 
 import { toTitleCase } from '@/shared/lib/utils';
@@ -19,27 +20,43 @@ type EventItemProps = {
     name: string;
     type: string;
     duration: number;
+    scheduleId: number;
     description?: string;
   };
 };
 
-export function EventItem(props: EventItemProps) {
-  const {} = useSchedulesQuery();
+export function EventItem({ event }: EventItemProps) {
+  const { isLoading: isLoadingSchedule, data: schedules } = useSchedulesQuery();
+
+  const schedule =
+    isLoadingSchedule || !schedules
+      ? undefined
+      : schedules.find((s) => s.id === event.scheduleId);
 
   return (
     <article className="flex items-center justify-between gap-4 rounded-lg border border-s-8 bg-white p-4 ps-5">
       <section className="space-y-2">
         <Heading level={'h3'} className="mb-1.5">
-          {props.event.name}
+          {event.name}
         </Heading>
         <div className="text-copy-14 flex items-center gap-2">
           <span className="inline-flex items-center gap-1">
             <ClockIcon className="size-4" />
-            {props.event.duration} min
+            {event.duration} min
           </span>
-          <span>{toTitleCase(props.event.type)}</span>
+          <span>{toTitleCase(event.type)}</span>
         </div>
-        <div>what schedule</div>
+        <div className="text-copy-14">
+          <span className="font-semibold">Schedule: </span>
+          {schedule && (
+            <Link
+              href={`/availability?scheduleId=${schedule.id}`}
+              className="hover:text-primary hover:underline"
+            >
+              {schedule.name} {schedule.isDefault ? '(default)' : ''}
+            </Link>
+          )}
+        </div>
       </section>
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
@@ -62,12 +79,12 @@ export function EventItemFallback() {
       className="flex items-center justify-between gap-4 rounded-lg border border-s-8 bg-white p-4 ps-5"
     >
       <div>
-        <Skeleton className="mb-2 h-6 w-[20ch]" />
+        <Skeleton className="mb-2 h-5.5 w-[20ch]" />
         <div className="text-copy-14 flex items-center gap-2">
           <Skeleton className="h-5 w-[10ch]" />
           <Skeleton className="h-5 w-20" />
         </div>
-        <Skeleton className="mt-2 h-6 w-full" />
+        <Skeleton className="mt-2 h-5 w-full" />
       </div>
       <Skeleton className="size-9" />
     </div>
