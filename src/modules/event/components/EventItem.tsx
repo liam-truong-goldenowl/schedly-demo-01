@@ -21,7 +21,7 @@ type EventItemProps = {
     type: string;
     duration: number;
     scheduleId: number;
-    description?: string;
+    description?: string | null;
   };
 };
 

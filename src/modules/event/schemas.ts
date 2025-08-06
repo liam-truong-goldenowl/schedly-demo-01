@@ -8,7 +8,7 @@ export const EventSchema = z.object({
   scheduleId: z.number(),
   locationType: z.string(),
   inviteeLimit: z.number(),
-  description: z.string().optional(),
+  description: z.string().optional().nullable(),
   locationDetails: z.string(),
 });
 
