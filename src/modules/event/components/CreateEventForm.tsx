@@ -54,16 +54,20 @@ const formSchema = z.object({
 });
 
 export function CreateEventForm() {
-  const { isLoading, data: schedules } = useSchedulesData();
-  const { eventType } = useEventTypeParam();
-  const { createEvent, isCreatingEvent } = useEventMutations();
   const router = useRouter();
+  const { eventType } = useEventTypeParam();
+  const { isLoading, data: schedules } = useSchedulesData();
+  const { createEvent, isCreatingEvent } = useEventMutations();
+
+  const [scheduleId, setScheduleId] = useState<number | undefined>();
   const [locationType, setLocationType] = useState<string>(
     LocationType.IN_PERSON,
   );
-  const [scheduleId, setScheduleId] = useState<number | undefined>();
+
   const selectedSchedule =
     schedules?.find((schedule) => schedule.id === scheduleId) || schedules?.[0];
+  const DURATION_OPTIONS = [15, 30, 45, 60, 90, 150];
+  const INVITEE_LIMIT_OPTIONS = [1, 2, 3, 4, 5, 10, 20];
 
   const form = useForm<z.infer<typeof formSchema>>({
     defaultValues: {
@@ -155,7 +159,7 @@ export function CreateEventForm() {
                     </span>
                   </div>
                   <ul className="text-muted-foreground flex flex-wrap gap-2">
-                    {[15, 30, 45, 60, 90, 150].map((duration) => (
+                    {DURATION_OPTIONS.map((duration) => (
                       <li key={duration}>
                         <button
                           className="text-copy-14 hover:bg-accent hover:text-accent-foreground active:text-accent-foreground active:bg-accent cursor-pointer rounded-full border px-4 py-1"
@@ -338,7 +342,7 @@ export function CreateEventForm() {
                     </span>
                   </div>
                   <ul className="text-muted-foreground flex flex-wrap gap-2">
-                    {[2, 4, 5, 6, 10, 20].map((inviteeCount) => (
+                    {INVITEE_LIMIT_OPTIONS.map((inviteeCount) => (
                       <li key={inviteeCount}>
                         <button
                           type="button"
