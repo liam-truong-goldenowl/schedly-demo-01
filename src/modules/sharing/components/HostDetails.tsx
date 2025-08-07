@@ -8,7 +8,7 @@ type HostDetailsProps = {
 };
 export function HostDetails({ host }: HostDetailsProps) {
   return (
-    <section className="px7 mx-auto max-w-[860px] py-6 text-center">
+    <section className="p-4 text-center">
       <Heading level={'h2'} className="mb-1">
         {host.name}
       </Heading>

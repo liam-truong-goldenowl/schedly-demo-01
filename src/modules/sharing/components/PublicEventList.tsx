@@ -12,17 +12,17 @@ type PublicEventListProps = {
 
 export function PublicEventList({ events, hostSlug }: PublicEventListProps) {
   return (
-    <section className="mx-auto max-w-[860px] px-7 py-6">
+    <section>
       <Heading level={'h2'} className="sr-only">
         Public Events
       </Heading>
 
-      <ul className="bg-muted grid grid-cols-2 gap-(--border-width) p-(--border-width) [--border-width:calc(var(--spacing)*0.5)]">
+      <ul className="grid gap-x-8 p-1 @md:max-h-110 @md:grid-cols-2 @md:overflow-y-auto">
         {events.map((event) => (
           <li key={event.id}>
             <Link
               href={`/sharing/${hostSlug}/${event.slug}`}
-              className="bg-background hover:bg-accent block aspect-[2/1] px-6 py-8"
+              className="hover:bg-accent focus-visible:bg-accent block aspect-[2/1] border-t-2 px-6 py-8 focus-visible:border-transparent"
             >
               <div className="mb-2.5 flex items-center justify-between">
                 <Heading level={'h3'} className="mb-0">
@@ -30,7 +30,7 @@ export function PublicEventList({ events, hostSlug }: PublicEventListProps) {
                 </Heading>
                 <PlayIcon size={18} className="fill-current" />
               </div>
-              <p className="text-muted-foreground text-copy-14">
+              <p className="text-muted-foreground text-copy-14 text-pretty">
                 {event.description
                   ? event.description
                   : 'No description available'}
