@@ -11,6 +11,21 @@ type PublicEventListProps = {
 };
 
 export function PublicEventList({ events, hostSlug }: PublicEventListProps) {
+  const isEmpty = events.length === 0;
+
+  if (isEmpty) {
+    return (
+      <section>
+        <Heading level={'h2'} className="sr-only">
+          Public Events
+        </Heading>
+        <p className="text-muted-foreground text-center">
+          This host has no public events.
+        </p>
+      </section>
+    );
+  }
+
   return (
     <section>
       <Heading level={'h2'} className="sr-only">

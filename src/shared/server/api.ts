@@ -14,11 +14,9 @@ export const api = createFetch({
   onRequest: async (context) => {
     const session = await getServerSession(authOptions);
 
-    if (!session) {
-      redirect('/login');
+    if (session) {
+      context.headers.set('Authorization', `Bearer ${session.accessToken}`);
     }
-
-    context.headers.set('Authorization', `Bearer ${session.accessToken}`);
 
     return context;
   },
