@@ -180,7 +180,6 @@
 }
 
 /* Chrome, Safari, Edge, Opera */
-input::-webkit-outer-spin-button,
 input::-webkit-inner-spin-button {
   -webkit-appearance: none;
   margin: 0;
@@ -192,22 +191,47 @@ input[type='number'] {
 }
 
 @layer utilities {
-  @layer utilities {
-    .ribbon {
-      --f: 0.5em;
-      border-image: conic-gradient(#0008 0 0) 51% / var(--f);
-      clip-path: polygon(
-        100% calc(100% - var(--f)),
-        100% 100%,
-        calc(100% - var(--f)) calc(100% - var(--f)),
-        var(--f) calc(100% - var(--f)),
-        0 100%,
-        0 calc(100% - var(--f)),
-        999px calc(100% - var(--f) - 999px),
-        calc(100% - 999px) calc(100% - var(--f) - 999px)
-      );
-      transform: translate(calc((1 - cos(45deg)) * 100%), -100%) rotate(45deg);
-      transform-origin: 0% 100%;
-    }
+  .ribbon {
+    --f: 0.5em;
+    border-image: conic-gradient(#0008 0 0) 51% / var(--f);
+    clip-path: polygon(
+      100% calc(100% - var(--f)),
+      100% 100%,
+      calc(100% - var(--f)) calc(100% - var(--f)),
+      var(--f) calc(100% - var(--f)),
+      0 100%,
+      0 calc(100% - var(--f)),
+      999px calc(100% - var(--f) - 999px),
+      calc(100% - 999px) calc(100% - var(--f) - 999px)
+    );
+    transform: translate(calc((1 - cos(45deg)) * 100%), -100%) rotate(45deg);
+    transform-origin: 0% 100%;
   }
+}
+
+@utility auto-fill-* {
+  grid-template-columns: repeat(
+    auto-fill,
+    minmax(min(--value([*]), 100%), 1fr)
+  );
+  grid-template-columns: repeat(
+    auto-fill,
+    minmax(min(--value(--text-*), 100%), 1fr)
+  );
+  grid-template-columns: repeat(
+    auto-fill,
+    minmax(min(var(--spacing) * --value(integer), 100%), 1fr)
+  );
+}
+
+@utility auto-fit-* {
+  grid-template-columns: repeat(auto-fit, minmax(min(--value([*]), 100%), 1fr));
+  grid-template-columns: repeat(
+    auto-fit,
+    minmax(min(--value(--text-*), 100%), 1fr)
+  );
+  grid-template-columns: repeat(
+    auto-fit,
+    minmax(min(var(--spacing) * --value(integer), 100%), 1fr)
+  );
 }
