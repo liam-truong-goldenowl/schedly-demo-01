@@ -12,7 +12,9 @@ export default function EventsPage() {
           <CreateEventButton />
         </div>
         <div>
-          <VisitLandingPageLink />
+          <div className="flex items-center justify-end py-2">
+            <VisitLandingPageLink />
+          </div>
           <EventList />
         </div>
       </div>
