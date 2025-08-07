@@ -1,7 +1,7 @@
 import { redirect } from 'next/navigation';
 import { getServerSession } from 'next-auth';
 
-import { authOptions } from '@/shared/lib/auth';
+import { authOptions } from '@/shared/server/auth';
 
 export default async function ProtectedLayout({
   children,
