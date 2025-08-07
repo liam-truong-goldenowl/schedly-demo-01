@@ -23,3 +23,7 @@ export async function getEvents({ cursor }: { cursor: string | null }) {
     query: { cursor },
   });
 }
+
+export async function deleteEvent(eventId: number) {
+  return clientApiWithAuth(`@delete/events/${eventId}`, { throw: true });
+}

@@ -1,6 +1,6 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 
-import { createEvent } from '../services/event.api';
+import { createEvent, deleteEvent } from '../services/event.api';
 
 export function useEventMutations() {
   const queryClient = useQueryClient();
@@ -12,8 +12,17 @@ export function useEventMutations() {
     },
   });
 
+  const deleteEventMutation = useMutation({
+    mutationFn: deleteEvent,
+    onSettled: () => {
+      queryClient.invalidateQueries({ queryKey: ['events'] });
+    },
+  });
+
   return {
     createEvent: createEventMutation.mutateAsync,
     isCreatingEvent: createEventMutation.isPending,
+    deleteEvent: deleteEventMutation.mutateAsync,
+    isDeletingEvent: deleteEventMutation.isPending,
   };
 }
