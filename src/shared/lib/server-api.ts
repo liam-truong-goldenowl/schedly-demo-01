@@ -2,8 +2,9 @@ import { redirect } from 'next/navigation';
 import { getServerSession } from 'next-auth';
 import { createFetch } from '@better-fetch/fetch';
 
+import { authOptions } from '../server/auth';
+
 import { env } from './env';
-import { authOptions } from './auth';
 
 export const serverApi = createFetch({
   baseURL: env.NEXT_PUBLIC_API_URL,
