@@ -43,3 +43,22 @@ export function toTitleCase(str: string): string {
 export function formatTime(timeString: string): string {
   return DateTime.fromFormat(timeString, 'HH:mm:ss').toFormat('HH:mm a');
 }
+
+export function getMissingDatesInMonth(
+  month: string,
+  availableDates: string[],
+): Date[] {
+  const start = DateTime.fromISO(month, { zone: 'utc' }).startOf('month');
+  const end = DateTime.fromISO(month, { zone: 'utc' }).endOf('month');
+  const missingDates: Date[] = [];
+  const availableDatesSet = new Set(availableDates);
+
+  for (let date = start; date <= end; date = date.plus({ days: 1 })) {
+    const shortDate = date.toFormat('yyyy-MM-dd');
+    if (!availableDatesSet.has(shortDate)) {
+      missingDates.push(date.toJSDate());
+    }
+  }
+
+  return missingDates;
+}
