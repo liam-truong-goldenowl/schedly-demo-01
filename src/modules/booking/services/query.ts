@@ -22,42 +22,19 @@ export function fetchEventDetails(eventSlug: string) {
   });
 }
 
-export function fetchAvailableMonthDates({
-  monthString,
-  eventId,
-  timezone,
-}: {
-  monthString: string;
+export function fetchTimeSlots(query: {
+  month: string;
   eventId: number;
   timezone: string;
 }) {
-  return clientApi(`@get/bookings/available-month-dates`, {
-    output: z.array(z.string()),
-    query: {
-      month: monthString,
-      eventId,
-      timezone,
-    },
-    throw: true,
-  });
-}
-
-export function fetchAvailableStartTimes({
-  dateString,
-  eventId,
-  timezone,
-}: {
-  dateString: string;
-  eventId: number;
-  timezone: string;
-}) {
-  return clientApi(`@get/bookings/available-start-times`, {
-    output: z.array(z.string()),
-    query: {
-      date: dateString,
-      eventId,
-      timezone,
-    },
+  return clientApi(`@get/bookings/time-slots`, {
+    output: z.array(
+      z.object({
+        date: z.string(),
+        slots: z.array(z.string()),
+      }),
+    ),
+    query,
     throw: true,
   });
 }

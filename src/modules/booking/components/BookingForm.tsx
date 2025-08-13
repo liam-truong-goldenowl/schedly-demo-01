@@ -1,14 +1,17 @@
 'use client';
 
 import z from 'zod';
+import { DateTime } from 'luxon';
+import { useReducer } from 'react';
 import { useForm } from 'react-hook-form';
+import { useRouter } from 'next/navigation';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useSuspenseQuery } from '@tanstack/react-query';
 
+import { formatDate } from '@/shared/lib/time';
 import { Input } from '@/shared/components/ui/input';
 import { Button } from '@/shared/components/ui/button';
 import { Textarea } from '@/shared/components/ui/textarea';
-import { StatefulButton } from '@/shared/components/ui/stateful-button';
 import { RequiredInputIndicator } from '@/shared/components/RequiredInputIndicator';
 import {
   Form,
@@ -19,8 +22,9 @@ import {
   FormMessage,
 } from '@/shared/components/ui/form';
 
-import { useSlotQueryState } from '../hooks/useSlotQueryState';
 import { useDateQueryState } from '../hooks/useDateQueryState';
+import { useSlotQueryState } from '../hooks/useSlotQueryState';
+import { useBookingsMutation } from '../hooks/useBookingsMutation';
 import { eventDetailsQuery } from '../queries/event-details-query';
 import { useTimezoneQueryState } from '../hooks/useTimezoneQueryState';
 
@@ -35,28 +39,37 @@ const FormSchema = z.object({
 
 interface BookingFormProps {
   eventSlug: string;
+  hostSlug: string;
 }
 
-export function BookingForm({ eventSlug }: BookingFormProps) {
-  const { slot, setSlot } = useSlotQueryState();
+export function BookingForm({ eventSlug, hostSlug }: BookingFormProps) {
+  const router = useRouter();
+
   const { date } = useDateQueryState();
-  const guestEmails = [] as string[];
+  const { timezone } = useTimezoneQueryState();
+  const { slot, setSlot } = useSlotQueryState();
   const { data: eventDetails } = useSuspenseQuery(eventDetailsQuery(eventSlug));
-  const { timezone } = useTimezoneQueryState(eventDetails.timezone);
+  const { createBooking, isCreatingBooking } = useBookingsMutation();
+
+  const [isBooked, setIsBooked] = useReducer(() => true, false);
+
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
     defaultValues: { email: '', name: '', note: '' },
   });
 
-  function onSubmit(data: z.infer<typeof FormSchema>) {
-    if (!slot || !date) {
+  async function onSubmit(data: z.infer<typeof FormSchema>) {
+    const isTimeSlotSelected = slot && date;
+    const guestEmails = [] as string[];
+
+    if (!isTimeSlotSelected) {
       return;
     }
 
-    const startTime = slot;
-    const startDate = date.toISOString().split('T')[0]; // Format date as YYYY-MM-DD
+    const startTime = DateTime.fromFormat(slot, 'HH:mm').toFormat('HH:mm:ss');
+    const startDate = formatDate(date);
 
-    console.log('Booking details:', {
+    await createBooking({
       startTime,
       startDate,
       timezone,
@@ -64,17 +77,21 @@ export function BookingForm({ eventSlug }: BookingFormProps) {
       eventId: eventDetails.id,
       ...data,
     });
+    setIsBooked();
   }
 
   function handleBack() {
     setSlot(null);
   }
 
+  const isFormDisabled = isCreatingBooking || isBooked;
+
   return (
     <div className="bg-background w-sm p-6">
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-5">
           <FormField
+            disabled={isFormDisabled}
             control={form.control}
             name="name"
             render={({ field }) => (
@@ -90,6 +107,7 @@ export function BookingForm({ eventSlug }: BookingFormProps) {
             )}
           />
           <FormField
+            disabled={isFormDisabled}
             control={form.control}
             name="email"
             render={({ field }) => (
@@ -105,6 +123,7 @@ export function BookingForm({ eventSlug }: BookingFormProps) {
             )}
           />
           <FormField
+            disabled={isFormDisabled}
             control={form.control}
             name="note"
             render={({ field }) => (
@@ -121,10 +140,25 @@ export function BookingForm({ eventSlug }: BookingFormProps) {
             )}
           />
           <div className="flex justify-end gap-2">
-            <Button variant="ghost" onClick={handleBack}>
+            <Button
+              variant="ghost"
+              onClick={handleBack}
+              disabled={isCreatingBooking}
+            >
               Back
             </Button>
-            <StatefulButton>Confirm</StatefulButton>
+            {isBooked ? (
+              <Button
+                type="button"
+                onClick={() => {
+                  router.replace(`/sharing/${hostSlug}`);
+                }}
+              >
+                Return to host events
+              </Button>
+            ) : (
+              <Button disabled={isFormDisabled}>Confirm</Button>
+            )}
           </div>
         </form>
       </Form>

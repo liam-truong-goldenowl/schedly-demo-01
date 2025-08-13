@@ -17,9 +17,10 @@ import {
 
 interface BookingStepsProps {
   eventSlug: string;
+  hostSlug: string;
 }
 
-export function BookingSteps({ eventSlug }: BookingStepsProps) {
+export function BookingSteps({ eventSlug, hostSlug }: BookingStepsProps) {
   const { slot } = useSlotQueryState();
   const { date } = useDateQueryState();
 
@@ -27,17 +28,22 @@ export function BookingSteps({ eventSlug }: BookingStepsProps) {
   const slotSelected = !!slot;
 
   if (dateSelected && slotSelected) {
-    return <BookingForm eventSlug={eventSlug} />;
+    return <BookingForm eventSlug={eventSlug} hostSlug={hostSlug} />;
   }
 
   return (
+    <Suspense fallback={<BookingStepsFallback />}>
+      <MeetingDatePicker eventSlug={eventSlug} />
+      <MeetingTimePicker eventSlug={eventSlug} />
+    </Suspense>
+  );
+}
+
+function BookingStepsFallback() {
+  return (
     <>
-      <Suspense fallback={<MeetingDatePickerFallback />}>
-        <MeetingDatePicker eventSlug={eventSlug} />
-      </Suspense>
-      <Suspense fallback={<MeetingTimePickerFallback />}>
-        <MeetingTimePicker eventSlug={eventSlug} />
-      </Suspense>
+      <MeetingDatePickerFallback />
+      <MeetingTimePickerFallback />
     </>
   );
 }

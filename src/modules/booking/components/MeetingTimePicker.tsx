@@ -7,11 +7,12 @@ import { formatTime } from '@/shared/lib/utils';
 import { Button } from '@/shared/components/ui/button';
 import { Skeleton } from '@/shared/components/ui/skeleton';
 
+import { timeSlotsQuery } from '../queries/time-slots-query';
 import { useDateQueryState } from '../hooks/useDateQueryState';
 import { useSlotQueryState } from '../hooks/useSlotQueryState';
+import { useMonthQueryState } from '../hooks/useMonthQueryState';
 import { eventDetailsQuery } from '../queries/event-details-query';
 import { useTimezoneQueryState } from '../hooks/useTimezoneQueryState';
-import { availableStartTimesQuery } from '../queries/available-start-times-query';
 
 interface MeetingTimePickerProps {
   eventSlug: string;
@@ -19,17 +20,17 @@ interface MeetingTimePickerProps {
 
 export function MeetingTimePicker({ eventSlug }: MeetingTimePickerProps) {
   const { date } = useDateQueryState();
-  const dateString = date ? format(date, 'yyyy-MM-dd') : null;
-  const { data: eventDetails } = useSuspenseQuery(eventDetailsQuery(eventSlug));
-  const { timezone } = useTimezoneQueryState(eventDetails.timezone);
+  const { month } = useMonthQueryState();
   const { setSlot } = useSlotQueryState();
-  const { data: timeSlots } = useSuspenseQuery(
-    availableStartTimesQuery({
-      dateString,
-      timezone,
-      eventId: eventDetails.id,
-    }),
+  const { timezone } = useTimezoneQueryState();
+  const { data: eventDetails } = useSuspenseQuery(eventDetailsQuery(eventSlug));
+  const { data: allDateTimeSlots } = useSuspenseQuery(
+    timeSlotsQuery({ month, eventId: eventDetails.id, timezone }),
   );
+  const dateString = date ? format(date, 'yyyy-MM-dd') : null;
+  const { slots: dateSlots } = allDateTimeSlots.find(
+    (slot) => slot.date === dateString,
+  ) ?? { slots: [] };
 
   return (
     <div className="bg-background flex w-50 flex-col p-6 pe-2">
@@ -38,15 +39,15 @@ export function MeetingTimePicker({ eventSlug }: MeetingTimePickerProps) {
           <p className="mb-4 font-medium">{format(date, 'EEEE d')}</p>
           <div className="grow overflow-y-auto pointer-fine:pe-4">
             <div className="grid gap-2">
-              {timeSlots.map((timeSlot) => (
+              {dateSlots.map((slot) => (
                 <Button
-                  key={timeSlot}
+                  key={slot}
                   size={'lg'}
                   variant={'outline'}
                   className="active:bg-primary/10 w-full"
-                  onClick={() => setSlot(timeSlot)}
+                  onClick={() => setSlot(slot)}
                 >
-                  {formatTime(timeSlot)}
+                  {formatTime(slot)}
                 </Button>
               ))}
             </div>

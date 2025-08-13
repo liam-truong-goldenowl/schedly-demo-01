@@ -4,13 +4,12 @@ import { useMemo } from 'react';
 import { useSuspenseQuery } from '@tanstack/react-query';
 
 import { Calendar } from '@/shared/components/ui/calendar';
-import { getMissingDatesInMonth } from '@/shared/lib/utils';
 
+import { timeSlotsQuery } from '../queries/time-slots-query';
 import { useDateQueryState } from '../hooks/useDateQueryState';
 import { useMonthQueryState } from '../hooks/useMonthQueryState';
 import { eventDetailsQuery } from '../queries/event-details-query';
 import { useTimezoneQueryState } from '../hooks/useTimezoneQueryState';
-import { availableMonthDatesQuery } from '../queries/available-month-dates-query';
 
 interface MeetingDatePickerProps {
   eventSlug: string;
@@ -21,17 +20,20 @@ export function MeetingDatePicker({ eventSlug }: MeetingDatePickerProps) {
   const { date, setDate } = useDateQueryState();
   const { month, setMonthFromDate } = useMonthQueryState();
   const { data: eventDetails } = useSuspenseQuery(eventDetailsQuery(eventSlug));
-  const { timezone } = useTimezoneQueryState(eventDetails.timezone);
-  const { data: availableMonthDates } = useSuspenseQuery(
-    availableMonthDatesQuery({
-      monthString: month,
+  const { timezone } = useTimezoneQueryState();
+  const { data: timeSlots } = useSuspenseQuery(
+    timeSlotsQuery({
+      month: month,
       eventId: eventDetails.id,
       timezone: timezone,
     }),
   );
   const unavailableDates = useMemo(
-    () => getMissingDatesInMonth(month, availableMonthDates),
-    [month, availableMonthDates],
+    () =>
+      timeSlots
+        .filter((slot) => slot.slots.length == 0)
+        .map((slot) => new Date(slot.date)),
+    [timeSlots],
   );
 
   function handleNextClick(date: Date) {
