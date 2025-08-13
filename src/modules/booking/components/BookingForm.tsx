@@ -66,8 +66,12 @@ export function BookingForm({ eventSlug, hostSlug }: BookingFormProps) {
       return;
     }
 
-    const startTime = DateTime.fromFormat(slot, 'HH:mm').toFormat('HH:mm:ss');
+    const baseTz = timezone;
+    const otherTz = eventDetails.timezone;
     const startDate = formatDate(date);
+    const startTime = DateTime.fromFormat(slot, 'HH:mm', { zone: baseTz })
+      .setZone(otherTz)
+      .toFormat('HH:mm:ss');
 
     await createBooking({
       startTime,
