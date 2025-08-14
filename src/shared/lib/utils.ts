@@ -34,12 +34,7 @@ export function toTitleCase(str: string): string {
     .join(' ');
 }
 
-/**
- * Formats a time string from 'HH:mm:ss' to 'HH:mm'.
- *
- * @param timeString - The time string in 'HH:mm:ss' format.
- * @returns The formatted time string in 'HH:mm' format.
- */
 export function formatTime(timeString: string): string {
-  return DateTime.fromFormat(timeString, 'HH:mm:ss').toFormat('HH:mm a');
+  const format = timeString.length === 8 ? 'HH:mm:ss' : 'HH:mm';
+  return DateTime.fromFormat(timeString, format).toFormat('HH:mm a');
 }

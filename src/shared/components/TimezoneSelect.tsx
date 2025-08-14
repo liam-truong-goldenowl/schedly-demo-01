@@ -1,9 +1,7 @@
 'use client';
 
-import { VList } from 'virtua';
-import { DateTime } from 'luxon';
-import { useState } from 'react';
-import { CheckIcon, ChevronsUpDownIcon } from 'lucide-react';
+import { useId, useMemo, useState } from 'react';
+import { CheckIcon, ChevronDownIcon } from 'lucide-react';
 
 import { cn } from '@/shared/lib/utils';
 import {
@@ -20,19 +18,47 @@ import {
   CommandInput,
 } from '@/shared/components/ui/command';
 
-import { TIME_ZONES } from '../constants/time';
-
 interface TimezoneSelectProps {
   defaultTz?: string;
   onChange?: (timezone: string) => void;
 }
 
 export function TimezoneSelect({ defaultTz, onChange }: TimezoneSelectProps) {
-  const [open, setOpen] = useState(false);
-  const [selectedTz, setSelectedTz] = useState(defaultTz ?? 'Select Timezone');
+  const id = useId();
+  const [open, setOpen] = useState<boolean>(false);
+  const [value, setValue] = useState<string>(() => {
+    const defaultBrowserTimezone =
+      Intl.DateTimeFormat().resolvedOptions().timeZone;
+    return defaultTz || defaultBrowserTimezone;
+  });
+
+  const timezones = Intl.supportedValuesOf('timeZone');
+
+  const formattedTimezones = useMemo(() => {
+    return timezones
+      .map((timezone) => {
+        const formatter = new Intl.DateTimeFormat('en', {
+          timeZone: timezone,
+          timeZoneName: 'shortOffset',
+        });
+        const parts = formatter.formatToParts(new Date());
+        const offset =
+          parts.find((part) => part.type === 'timeZoneName')?.value || '';
+        const modifiedOffset = offset === 'GMT' ? 'GMT+0' : offset;
+
+        return {
+          value: timezone,
+          label: `(${modifiedOffset}) ${timezone.replace(/_/g, ' ')}`,
+          numericOffset: parseInt(
+            offset.replace('GMT', '').replace('+', '') || '0',
+          ),
+        };
+      })
+      .sort((a, b) => a.numericOffset - b.numericOffset);
+  }, [timezones]);
 
   function handleTimezoneChange(timezone: string) {
-    setSelectedTz(timezone);
+    setValue(timezone === value ? '' : timezone);
     setOpen(false);
 
     if (onChange) {
@@ -42,39 +68,52 @@ export function TimezoneSelect({ defaultTz, onChange }: TimezoneSelectProps) {
 
   return (
     <Popover open={open} onOpenChange={setOpen}>
-      <PopoverTrigger className="text-copy-14 text-primary group flex items-center gap-2 font-medium">
-        {selectedTz}
-        <ChevronsUpDownIcon className="ml-2 size-4 shrink-0" />
+      <PopoverTrigger asChild>
+        <button
+          id={id}
+          role="combobox"
+          aria-expanded={open}
+          aria-controls={id}
+          className="text-primary group inline-flex cursor-pointer items-center gap-2 px-0.5 font-medium"
+        >
+          <span className={cn('truncate', !value && 'text-muted-foreground')}>
+            {value ? value : 'Select timezone'}
+          </span>
+          <ChevronDownIcon
+            size={16}
+            className="shrink-0 group-aria-expanded:rotate-180"
+            aria-hidden="true"
+          />
+        </button>
       </PopoverTrigger>
-      <PopoverContent className="w-80 p-0" align="start">
-        <Command>
-          <CommandInput placeholder="Search..." />
-          <CommandList className="max-h-[unset]">
-            <CommandEmpty>No timezones found.</CommandEmpty>
-            <VList style={{ height: '17.5rem' }}>
-              {TIME_ZONES.map((tzGroup) => (
-                <CommandGroup key={tzGroup.id} heading={tzGroup.group}>
-                  {tzGroup.utc!.map((tz) => (
-                    <CommandItem
-                      key={tz}
-                      value={tz}
-                      onSelect={handleTimezoneChange}
-                    >
-                      <CheckIcon
-                        className={cn(
-                          'text-primary mr-2 size-4',
-                          selectedTz === tz ? 'opacity-100' : 'opacity-0',
-                        )}
-                      />
-                      {tz}
-                      <span className="text-muted-foreground ml-auto">
-                        {DateTime.now().setZone(tz).toFormat('hh:mm')}
-                      </span>
-                    </CommandItem>
-                  ))}
-                </CommandGroup>
+      <PopoverContent
+        className="border-input w-full min-w-[var(--radix-popper-anchor-width)] p-0"
+        align="start"
+      >
+        <Command
+          filter={(value, search) => {
+            const normalizedValue = value.toLowerCase();
+            const normalizedSearch = search.toLowerCase().replace(/\s+/g, '');
+            return normalizedValue.includes(normalizedSearch) ? 1 : 0;
+          }}
+        >
+          <CommandInput placeholder="Search timezone..." />
+          <CommandList>
+            <CommandEmpty>No timezone found.</CommandEmpty>
+            <CommandGroup>
+              {formattedTimezones.map(({ value: itemValue, label }) => (
+                <CommandItem
+                  key={itemValue}
+                  value={itemValue}
+                  onSelect={handleTimezoneChange}
+                >
+                  {label}
+                  {value === itemValue && (
+                    <CheckIcon size={16} className="ml-auto" />
+                  )}
+                </CommandItem>
               ))}
-            </VList>
+            </CommandGroup>
           </CommandList>
         </Command>
       </PopoverContent>

@@ -62,30 +62,6 @@ export function findAvailableSlots(
   );
 }
 
-export function getTimeRangeBounds(
-  intervals: TimeInterval[],
-): { earliest: string; latest: string } | null {
-  if (intervals.length === 0) return null;
-
-  const FORMAT = 'HH:mm:ss';
-
-  let earliest = DateTime.fromFormat(intervals[0].startTime, FORMAT);
-  let latest = DateTime.fromFormat(intervals[0].endTime, FORMAT);
-
-  for (const { startTime, endTime } of intervals) {
-    const start = DateTime.fromFormat(startTime, FORMAT);
-    const end = DateTime.fromFormat(endTime, FORMAT);
-
-    if (start < earliest) earliest = start;
-    if (end > latest) latest = end;
-  }
-
-  return {
-    earliest: earliest.toFormat(FORMAT),
-    latest: latest.toFormat(FORMAT),
-  };
-}
-
 export function isOverlapping(
   interval1: TimeInterval,
   interval2: TimeInterval,
@@ -98,4 +74,8 @@ export function isOverlapping(
 
 export function isBefore(time1: string, time2: string): boolean {
   return time1 < time2;
+}
+
+export function formatDate(date: Date) {
+  return date.toISOString().split('T')[0];
 }

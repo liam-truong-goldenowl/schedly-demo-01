@@ -8,7 +8,7 @@ export async function signUp(userData: {
   timezone: string;
   password: string;
 }) {
-  return clientApi('@post/auth/sign-up', {
+  return clientApi('@post/auth/signup', {
     body: userData,
     output: z.object({
       name: z.string(),
