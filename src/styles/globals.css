@@ -1,5 +1,5 @@
-@import "tailwindcss";
-@import "tw-animate-css";
+@import 'tailwindcss';
+@import 'tw-animate-css';
 
 @custom-variant dark (&:is(.dark *));
 
@@ -41,20 +41,80 @@
   --radius-md: calc(var(--radius) - 2px);
   --radius-lg: var(--radius);
   --radius-xl: calc(var(--radius) + 4px);
+
+  /* Colors */
+  --color-border: var(--color-gray-300);
+  --color-border-hover: var(--color-gray-400);
+  --color-border-active: var(--color-gray-500);
+
+  /* Typography */
+  --text-heading-72: 4.5rem;
+  --text-heading-72--line-height: 5.25rem;
+  --text-heading-72--font-weight: 600;
+  --text-heading-72--letter-spacing: -0.02em;
+  --text-heading-64: 4rem;
+  --text-heading-64--line-height: 4.75rem;
+  --text-heading-64--font-weight: 600;
+  --text-heading-64--letter-spacing: -0.02em;
+  --text-heading-56: 3.5rem;
+  --text-heading-56--line-height: 4.25rem;
+  --text-heading-56--font-weight: 600;
+  --text-heading-56--letter-spacing: -0.02em;
+  --text-heading-48: 3rem;
+  --text-heading-48--line-height: 3.75rem;
+  --text-heading-48--font-weight: 600;
+  --text-heading-48--letter-spacing: -0.02em;
+  --text-heading-40: 2.5rem;
+  --text-heading-40--line-height: 3rem;
+  --text-heading-40--font-weight: 600;
+  --text-heading-40--letter-spacing: -0.02em;
+  --text-heading-32: 2rem;
+  --text-heading-32--line-height: 2.5rem;
+  --text-heading-32--font-weight: 600;
+  --text-heading-32--letter-spacing: -0.02em;
+  --text-heading-24: 1.5rem;
+  --text-heading-24--line-height: 2rem;
+  --text-heading-24--font-weight: 600;
+  --text-heading-24--letter-spacing: -0.02em;
+  --text-heading-20: 1.25rem;
+  --text-heading-20--line-height: 1.75rem;
+  --text-heading-20--font-weight: 600;
+  --text-heading-20--letter-spacing: -0.02em;
+  --text-heading-16: 1rem;
+  --text-heading-16--line-height: 1.5rem;
+  --text-heading-16--font-weight: 600;
+  --text-heading-16--letter-spacing: -0.02em;
+  --text-heading-14: 0.875rem;
+  --text-heading-14--line-height: 1.25rem;
+  --text-heading-14--font-weight: 600;
+  --text-heading-14--letter-spacing: -0.02em;
+
+  --text-copy-24: 1.5rem;
+  --text-copy-24--line-height: 2.25rem;
+  --text-copy-20: 1.25rem;
+  --text-copy-24--line-height: 2.25rem;
+  --text-copy-18: 1.125rem;
+  --text-copy-18--line-height: 1.75rem;
+  --text-copy-16: 1rem;
+  --text-copy-16--line-height: 1.5rem;
+  --text-copy-14: 0.875rem;
+  --text-copy-14--line-height: 1.25rem;
+  --text-copy-13: 0.8125rem;
+  --text-copy-13--line-height: 1.25rem;
 }
 
 :root {
   --radius: 0.625rem;
   --background: oklch(1 0 0);
-  --foreground: oklch(0.145 0 0);
+  --foreground: var(--color-gray-900);
   --card: oklch(1 0 0);
   --card-foreground: oklch(0.145 0 0);
   --popover: oklch(1 0 0);
   --popover-foreground: oklch(0.145 0 0);
-  --primary: oklch(0.205 0 0);
-  --primary-foreground: oklch(0.985 0 0);
+  --primary: oklch(0.573 0.23507 260.1068);
+  --primary-foreground: oklch(1 0 0);
   --secondary: oklch(0.97 0 0);
-  --secondary-foreground: oklch(0.205 0 0);
+  --secondary-foreground: oklch(0% 0 0);
   --muted: oklch(0.97 0 0);
   --muted-foreground: oklch(0.556 0 0);
   --accent: oklch(0.97 0 0);
@@ -68,7 +128,7 @@
   --chart-3: oklch(0.398 0.07 227.392);
   --chart-4: oklch(0.828 0.189 84.429);
   --chart-5: oklch(0.769 0.188 70.08);
-  --sidebar: oklch(0.985 0 0);
+  --sidebar: var(--color-white);
   --sidebar-foreground: oklch(0.145 0 0);
   --sidebar-primary: oklch(0.205 0 0);
   --sidebar-primary-foreground: oklch(0.985 0 0);
@@ -85,8 +145,6 @@
   --card-foreground: oklch(0.985 0 0);
   --popover: oklch(0.205 0 0);
   --popover-foreground: oklch(0.985 0 0);
-  --primary: oklch(0.922 0 0);
-  --primary-foreground: oklch(0.205 0 0);
   --secondary: oklch(0.269 0 0);
   --secondary-foreground: oklch(0.985 0 0);
   --muted: oklch(0.269 0 0);
@@ -119,4 +177,61 @@
   body {
     @apply bg-background text-foreground;
   }
+}
+
+/* Chrome, Safari, Edge, Opera */
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* Firefox */
+input[type='number'] {
+  -moz-appearance: textfield;
+}
+
+@layer utilities {
+  .ribbon {
+    --f: 0.5em;
+    border-image: conic-gradient(#0008 0 0) 51% / var(--f);
+    clip-path: polygon(
+      100% calc(100% - var(--f)),
+      100% 100%,
+      calc(100% - var(--f)) calc(100% - var(--f)),
+      var(--f) calc(100% - var(--f)),
+      0 100%,
+      0 calc(100% - var(--f)),
+      999px calc(100% - var(--f) - 999px),
+      calc(100% - 999px) calc(100% - var(--f) - 999px)
+    );
+    transform: translate(calc((1 - cos(45deg)) * 100%), -100%) rotate(45deg);
+    transform-origin: 0% 100%;
+  }
+}
+
+@utility auto-fill-* {
+  grid-template-columns: repeat(
+    auto-fill,
+    minmax(min(--value([*]), 100%), 1fr)
+  );
+  grid-template-columns: repeat(
+    auto-fill,
+    minmax(min(--value(--text-*), 100%), 1fr)
+  );
+  grid-template-columns: repeat(
+    auto-fill,
+    minmax(min(var(--spacing) * --value(integer), 100%), 1fr)
+  );
+}
+
+@utility auto-fit-* {
+  grid-template-columns: repeat(auto-fit, minmax(min(--value([*]), 100%), 1fr));
+  grid-template-columns: repeat(
+    auto-fit,
+    minmax(min(--value(--text-*), 100%), 1fr)
+  );
+  grid-template-columns: repeat(
+    auto-fit,
+    minmax(min(var(--spacing) * --value(integer), 100%), 1fr)
+  );
 }

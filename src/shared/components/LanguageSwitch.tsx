@@ -1,8 +1,8 @@
 'use client';
 
 import { useTransition } from 'react';
-import { Check, Languages } from 'lucide-react';
 import { useLocale, useTranslations } from 'next-intl';
+import { Check, Globe, ChevronDown } from 'lucide-react';
 
 import { Locale, LOCALES } from '@/i18n/config';
 import { setUserLocale } from '@/shared/lib/locale';
@@ -29,9 +29,10 @@ export function LanguageSwitch() {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button variant="outline" disabled={isPending}>
-          <Languages />
+        <Button variant="ghost" disabled={isPending} className="group gap-1">
+          <Globe />
           {t(locale)}
+          <ChevronDown className="group-aria-expanded:rotate-180" />
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end">
