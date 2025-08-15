@@ -59,6 +59,12 @@ export function EventList() {
     lastPage.totalCount - events.length,
   );
 
+  if (events.length < 1) {
+    return (
+      <p className="text-gray-500">You have not have any event types yet.</p>
+    );
+  }
+
   return (
     <section className="space-y-4">
       <h2 className="sr-only">Event list</h2>

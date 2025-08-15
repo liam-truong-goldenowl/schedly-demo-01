@@ -6,9 +6,9 @@ import { VisitLandingPageLink } from '@/modules/event/components/VisitLandingPag
 export default function EventsPage() {
   return (
     <main>
-      <Heading>Scheduling</Heading>
       <div className="space-y-8">
-        <div className="bg-background flex items-center justify-end gap-4 rounded-lg border p-4">
+        <div className="flex items-center justify-between">
+          <Heading className="mb-0">Event Types</Heading>
           <CreateEventButton />
         </div>
         <div>
