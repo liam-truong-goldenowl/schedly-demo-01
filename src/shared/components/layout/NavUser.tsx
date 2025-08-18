@@ -1,5 +1,8 @@
 'use client';
 
+import Link from 'next/link';
+import { signOut } from 'next-auth/react';
+import { ExternalLinkIcon } from 'lucide-react';
 import { useQuery } from '@tanstack/react-query';
 import { IconLogout, IconDotsVertical } from '@tabler/icons-react';
 
@@ -20,6 +23,7 @@ import {
   DropdownMenuItem,
   DropdownMenuContent,
   DropdownMenuTrigger,
+  DropdownMenuSeparator,
 } from '@/shared/components/ui/dropdown-menu';
 
 import { Skeleton } from '../ui/skeleton';
@@ -62,7 +66,20 @@ export function NavUser() {
             align="end"
             sideOffset={4}
           >
-            <DropdownMenuItem>
+            <DropdownMenuItem asChild>
+              <Link
+                target="_blank"
+                rel="noopener noreferrer"
+                href={`/sharing/${user.slug}`}
+              >
+                <ExternalLinkIcon />
+                Visit Landing Page
+              </Link>
+            </DropdownMenuItem>
+            <DropdownMenuSeparator />
+            <DropdownMenuItem
+              onClick={() => signOut({ callbackUrl: '/login' })}
+            >
               <IconLogout />
               Log out
             </DropdownMenuItem>
