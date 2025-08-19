@@ -58,20 +58,20 @@ export function EventList() {
         />
         <If
           condition={isFetchingNextPage}
-          show={
+          show={() => (
             <MapList
               items={Array.from({ length: 5 }, (_, index) => index)}
               itemKey={({ item }) => item}
               render={() => <EventItemFallback />}
               className="grid gap-(--divider-size)"
             />
-          }
+          )}
         />
       </div>
       <footer>
         <If
           condition={hasNextPage}
-          show={
+          show={() => (
             <button
               onClick={() => fetchNextPage()}
               className="hover:text-primary active:text-primary inline-flex cursor-pointer items-center gap-2"
@@ -79,10 +79,10 @@ export function EventList() {
               <ChevronsDownIcon size={18} />
               <span>Show more</span>
             </button>
-          }
-          otherwiseShow={
+          )}
+          otherwiseShow={() => (
             <p className="text-gray-600">You reached the end of the list.</p>
-          }
+          )}
         />
       </footer>
     </section>

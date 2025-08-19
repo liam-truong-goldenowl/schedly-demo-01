@@ -58,7 +58,7 @@ export function TimezoneSelect({ defaultTz, onChange }: TimezoneSelectProps) {
   }, [timezones]);
 
   function handleTimezoneChange(timezone: string) {
-    setValue(timezone === value ? '' : timezone);
+    setValue(timezone);
     setOpen(false);
 
     if (onChange) {

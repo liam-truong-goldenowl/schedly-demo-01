@@ -1,17 +1,16 @@
 'use client';
 
 import z from 'zod';
-import { DateTime } from 'luxon';
 import { useReducer } from 'react';
 import { useForm } from 'react-hook-form';
 import { useRouter } from 'next/navigation';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useSuspenseQuery } from '@tanstack/react-query';
 
-import { formatDate } from '@/shared/lib/time';
 import { Input } from '@/shared/components/ui/input';
 import { Button } from '@/shared/components/ui/button';
 import { Textarea } from '@/shared/components/ui/textarea';
+import { formatDate, convertTimezone } from '@/shared/lib/time';
 import { RequiredInputIndicator } from '@/shared/components/RequiredInputIndicator';
 import {
   Form,
@@ -60,26 +59,30 @@ export function BookingForm({ eventSlug, hostSlug }: BookingFormProps) {
 
   async function onSubmit(data: z.infer<typeof FormSchema>) {
     const isTimeSlotSelected = slot && date;
-    const guestEmails = [] as string[];
 
     if (!isTimeSlotSelected) {
       return;
     }
 
-    const baseTz = timezone;
-    const otherTz = eventDetails.timezone;
-    const startDate = formatDate(date);
-    const startTime = DateTime.fromFormat(slot, 'HH:mm', { zone: baseTz })
-      .setZone(otherTz)
-      .toFormat('HH:mm:ss');
+    const { date: startDate, time: startTime } = convertTimezone({
+      srcTz: timezone,
+      dstTz: eventDetails.timezone,
+      date: formatDate(date),
+      time: slot,
+    });
 
     await createBooking({
       startTime,
       startDate,
       timezone,
-      guestEmails,
       eventId: eventDetails.id,
-      ...data,
+      note: data.note,
+      invitees: [
+        {
+          email: data.email,
+          name: data.name,
+        },
+      ],
     });
     setIsBooked();
   }

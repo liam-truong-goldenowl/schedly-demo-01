@@ -7,12 +7,10 @@ import { formatTime } from '@/shared/lib/utils';
 import { Button } from '@/shared/components/ui/button';
 import { Skeleton } from '@/shared/components/ui/skeleton';
 
-import { timeSlotsQuery } from '../queries/time-slots-query';
 import { useDateQueryState } from '../hooks/useDateQueryState';
 import { useSlotQueryState } from '../hooks/useSlotQueryState';
-import { useMonthQueryState } from '../hooks/useMonthQueryState';
+import { useTimeSlotsQuery } from '../hooks/useTimeSlotsQuery';
 import { eventDetailsQuery } from '../queries/event-details-query';
-import { useTimezoneQueryState } from '../hooks/useTimezoneQueryState';
 
 interface MeetingTimePickerProps {
   eventSlug: string;
@@ -20,15 +18,15 @@ interface MeetingTimePickerProps {
 
 export function MeetingTimePicker({ eventSlug }: MeetingTimePickerProps) {
   const { date } = useDateQueryState();
-  const { month } = useMonthQueryState();
   const { setSlot } = useSlotQueryState();
-  const { timezone } = useTimezoneQueryState();
   const { data: eventDetails } = useSuspenseQuery(eventDetailsQuery(eventSlug));
-  const { data: allDateTimeSlots } = useSuspenseQuery(
-    timeSlotsQuery({ month, eventId: eventDetails.id, timezone }),
+  const { timeSlots } = useTimeSlotsQuery(
+    eventDetails.id,
+    eventDetails.timezone,
+    eventDetails.duration,
   );
   const dateString = date ? format(date, 'yyyy-MM-dd') : null;
-  const { slots: dateSlots } = allDateTimeSlots.find(
+  const { slots: dateSlots } = timeSlots.find(
     (slot) => slot.date === dateString,
   ) ?? { slots: [] };
 
@@ -41,13 +39,13 @@ export function MeetingTimePicker({ eventSlug }: MeetingTimePickerProps) {
             <div className="grid gap-2">
               {dateSlots.map((slot) => (
                 <Button
-                  key={slot}
+                  key={slot.dstSlot}
                   size={'lg'}
                   variant={'outline'}
                   className="active:bg-primary/10 w-full"
-                  onClick={() => setSlot(slot)}
+                  onClick={() => setSlot(slot.dstSlot)}
                 >
-                  {formatTime(slot)}
+                  {formatTime(slot.dstSlot)}
                 </Button>
               ))}
             </div>

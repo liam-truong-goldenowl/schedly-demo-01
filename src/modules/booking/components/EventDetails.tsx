@@ -1,13 +1,14 @@
 'use client';
 
 import { format } from 'date-fns';
+import pluralize from 'pluralize';
 import { useSuspenseQuery } from '@tanstack/react-query';
 import {
   ClockIcon,
   GlobeIcon,
   MinusIcon,
-  MapPinIcon,
   CalendarIcon,
+  PersonStandingIcon,
 } from 'lucide-react';
 
 import { Heading } from '@/shared/components/layout/Heading';
@@ -35,7 +36,7 @@ export function EventDetails({ eventSlug }: { eventSlug: string }) {
   }
 
   return (
-    <section className="bg-background max-w-prose p-6">
+    <section className="bg-background max-w-prose min-w-xs p-6">
       <header>
         <p className="text-copy-16 mb-1.5 font-semibold text-gray-500">
           {eventDetails.host.name}
@@ -68,10 +69,11 @@ export function EventDetails({ eventSlug }: { eventSlug: string }) {
           <span>{eventDetails.duration}m</span>
         </div>
         <div className="flex items-center gap-2">
-          {eventDetails.location.type === 'in_person' && (
-            <MapPinIcon size={16} />
-          )}
-          {eventDetails.location.details}
+          <PersonStandingIcon size={16} />
+          <span>
+            {pluralize('person', eventDetails.inviteeLimit, true)} limit at a
+            time
+          </span>
         </div>
         <div className="flex items-center gap-2">
           <GlobeIcon size={16} />
