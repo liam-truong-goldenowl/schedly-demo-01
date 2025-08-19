@@ -5,13 +5,10 @@ import { EventSchema } from '../schemas';
 
 export async function createEvent(body: {
   name: string;
-  type: string;
   duration: number;
   scheduleId: number;
-  locationType: string;
   inviteeLimit: number;
   description?: string;
-  locationDetails: string;
 }) {
   return clientApiWithAuth('@post/events', { body, throw: true });
 }

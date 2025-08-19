@@ -1,11 +1,24 @@
 import Link from 'next/link';
-import { ClockIcon, TrashIcon, EllipsisVerticalIcon } from 'lucide-react';
+import { toast } from 'sonner';
+import { useTransition } from 'react';
+import {
+  LinkIcon,
+  ClockIcon,
+  TrashIcon,
+  ExternalLinkIcon,
+  EllipsisVerticalIcon,
+} from 'lucide-react';
 
-import { toTitleCase } from '@/shared/lib/utils';
 import { Button } from '@/shared/components/ui/button';
 import { Skeleton } from '@/shared/components/ui/skeleton';
 import { Heading } from '@/shared/components/layout/Heading';
+import { useUser } from '@/modules/auth/contexts/UserContext';
 import { StatefulButton } from '@/shared/components/ui/stateful-button';
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from '@/shared/components/ui/tooltip';
 import {
   DropdownMenu,
   DropdownMenuItem,
@@ -15,72 +28,121 @@ import {
 import {
   AlertDialog,
   AlertDialogTitle,
-  AlertDialogHeader,
-  AlertDialogFooter,
   AlertDialogAction,
   AlertDialogCancel,
+  AlertDialogFooter,
+  AlertDialogHeader,
   AlertDialogContent,
   AlertDialogTrigger,
   AlertDialogDescription,
 } from '@/shared/components/ui/alert-dialog';
 
-import { useSchedulesQuery } from '../hooks/useSchedulesQuery';
 import { useEventMutations } from '../hooks/useEventMutations';
 
 type EventItemProps = {
   event: {
     id: number;
     name: string;
-    type: string;
     duration: number;
     scheduleId: number;
-    description?: string | null;
+    description?: string;
+    slug: string;
   };
 };
 
 export function EventItem({ event }: EventItemProps) {
-  const { isLoading: isLoadingSchedule, data: schedules } = useSchedulesQuery();
-  const { deleteEvent, isDeletingEvent } = useEventMutations();
+  return (
+    <article className="bg-background flex items-center justify-between gap-4 px-6 py-4">
+      <section className="space-y-2">
+        <Heading level={'h3'} className="mb-1.5">
+          {event.name}
+        </Heading>
+        <div className="text-copy-14 flex items-center gap-2">
+          <span className="inline-flex items-center gap-1 rounded bg-gray-100 px-2 py-1">
+            <ClockIcon className="size-4" />
+            {event.duration} min
+          </span>
+        </div>
+      </section>
+      <EventItemActions event={event} />
+    </article>
+  );
+}
 
-  const schedule =
-    isLoadingSchedule || !schedules
-      ? undefined
-      : schedules.find((s) => s.id === event.scheduleId);
+type EventItemActionsProps = {
+  event: {
+    id: number;
+    slug: string;
+  };
+};
+
+function EventItemActions({ event }: EventItemActionsProps) {
+  const { slug: hostSlug } = useUser();
+  const { deleteEvent, isDeletingEvent } = useEventMutations();
+  const [isCopyingLink, startCopyingLink] = useTransition();
+
+  const eventPath = `/sharing/${hostSlug}/${event.slug}`;
 
   async function handleDeleteEvent() {
     if (isDeletingEvent) return;
     await deleteEvent(event.id);
   }
 
+  async function handleCopyLink() {
+    const eventLink = `${window.location.origin}${eventPath}`;
+    startCopyingLink(async () => {
+      await navigator.clipboard.writeText(eventLink);
+      toast.success('Event link copied to clipboard');
+    });
+  }
+
   return (
-    <article className="flex items-center justify-between gap-4 rounded-lg border border-s-8 bg-white p-4 ps-5">
-      <section className="space-y-2">
-        <Heading level={'h3'} className="mb-1.5">
-          {event.name}
-        </Heading>
-        <div className="text-copy-14 flex items-center gap-2">
-          <span className="inline-flex items-center gap-1">
-            <ClockIcon className="size-4" />
-            {event.duration} min
-          </span>
-          <span>{toTitleCase(event.type)}</span>
-        </div>
-        <div className="text-copy-14">
-          <span className="font-semibold">Schedule: </span>
-          {schedule && (
-            <Link
-              href={`/availability?scheduleId=${schedule.id}`}
-              className="hover:text-primary hover:underline"
-            >
-              {schedule.name} {schedule.isDefault ? '(default)' : ''}
+    <div className="bg-border flex gap-[1px] overflow-clip rounded-md border">
+      <Tooltip>
+        <TooltipTrigger asChild>
+          <Button
+            size="icon"
+            variant="ghost"
+            className="bg-background rounded-none"
+            aria-label="Preview event"
+            asChild
+          >
+            <Link href={eventPath} target="_blank">
+              <ExternalLinkIcon className="size-4" />
             </Link>
-          )}
-        </div>
-      </section>
+          </Button>
+        </TooltipTrigger>
+        <TooltipContent>
+          <p>Preview</p>
+        </TooltipContent>
+      </Tooltip>
+      <Tooltip>
+        <TooltipTrigger asChild>
+          <Button
+            size="icon"
+            variant="ghost"
+            className="bg-background rounded-none"
+            aria-label="Copy event link"
+            onClick={handleCopyLink}
+            disabled={isCopyingLink}
+          >
+            <LinkIcon className="size-4" />
+          </Button>
+        </TooltipTrigger>
+        <TooltipContent>
+          <p>Copy link to event</p>
+        </TooltipContent>
+      </Tooltip>
+
       <AlertDialog>
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
-            <Button size="icon" variant="ghost" aria-label="Actions">
+            <Button
+              size="icon"
+              variant="ghost"
+              className="bg-background rounded-none"
+              aria-label="Delete event"
+            >
               <EllipsisVerticalIcon className="size-4" />
             </Button>
           </DropdownMenuTrigger>
@@ -117,7 +179,7 @@ export function EventItem({ event }: EventItemProps) {
           </AlertDialogFooter>
         </AlertDialogContent>
       </AlertDialog>
-    </article>
+    </div>
   );
 }
 
@@ -125,17 +187,17 @@ export function EventItemFallback() {
   return (
     <div
       aria-hidden="true"
-      className="flex items-center justify-between gap-4 rounded-lg border border-s-8 bg-white p-4 ps-5"
+      className="bg-background flex items-center justify-between gap-4 px-6 py-4"
     >
       <div>
-        <Skeleton className="mb-2 h-5.5 w-[20ch]" />
-        <div className="text-copy-14 flex items-center gap-2">
-          <Skeleton className="h-5 w-[10ch]" />
-          <Skeleton className="h-5 w-20" />
-        </div>
-        <Skeleton className="mt-2 h-5 w-full" />
+        <Skeleton className="text-heading-16 mb-2 h-[1lh] w-[20ch]" />
+        <Skeleton className="h-5 w-[8ch]" />
       </div>
-      <Skeleton className="size-9" />
+      <div className="flex items-center gap-[1px] overflow-clip rounded-md">
+        <Skeleton className="size-9 rounded-none" />
+        <Skeleton className="size-9 rounded-none" />
+        <Skeleton className="size-9 rounded-none" />
+      </div>
     </div>
   );
 }
