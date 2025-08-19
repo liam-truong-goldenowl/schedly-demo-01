@@ -12,6 +12,7 @@ import {
   FETCHING_FALLBACK_ITEMS_COUNT,
 } from '../config';
 
+import { EmptyEventList } from './EmptyEventList';
 import { EventItem, EventItemFallback } from './EventItem';
 
 export function EventList() {
@@ -25,7 +26,11 @@ export function EventList() {
   } = useEvents();
   const { isLoading: isLoadingSchedules } = useSchedulesQuery();
 
-  const isLoading = isLoadingEvents || isLoadingSchedules;
+  const isLoading = isLoadingEvents || isLoadingSchedules || !data;
+
+  if (error) {
+    return <div>Error loading events</div>;
+  }
 
   if (isLoading) {
     return (
@@ -44,14 +49,6 @@ export function EventList() {
     );
   }
 
-  if (error) {
-    return <div>Error loading events</div>;
-  }
-
-  if (!data) {
-    return null;
-  }
-
   const lastPage = data.pages[data.pages.length - 1];
   const events = data.pages.flatMap((page) => page.items);
   const nextNumberOfEvents = Math.min(
@@ -60,9 +57,7 @@ export function EventList() {
   );
 
   if (events.length < 1) {
-    return (
-      <p className="text-gray-500">You have not have any event types yet.</p>
-    );
+    return <EmptyEventList />;
   }
 
   return (
