@@ -74,7 +74,7 @@ export function TimezoneSelect({ defaultTz, onChange }: TimezoneSelectProps) {
           role="combobox"
           aria-expanded={open}
           aria-controls={id}
-          className="text-primary group inline-flex cursor-pointer items-center gap-2 px-0.5 font-medium"
+          className="text-copy-14 text-primary group inline-flex cursor-pointer items-center gap-2 px-0.5 font-medium"
         >
           <span className={cn('truncate', !value && 'text-muted-foreground')}>
             {value ? value : 'Select timezone'}

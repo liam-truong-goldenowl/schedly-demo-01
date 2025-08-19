@@ -14,11 +14,12 @@ export function DayIndicator({ day }: DayIndicatorProps) {
   return (
     <Tooltip>
       <TooltipTrigger asChild>
-        <div className="flex size-9 items-center">
-          <div className="bg-primary text-primary-foreground text-copy-13 grid size-6 place-content-center overflow-clip rounded-full font-bold">
-            <span>{day.charAt(0).toUpperCase()}</span>
+        <div className="flex h-9 items-center gap-2">
+          <div className="bg-primary text-primary-foreground grid size-6 place-content-center rounded-full">
+            <span aria-hidden={true}>{day.charAt(0).toUpperCase()}</span>
             <span className="sr-only">{day}</span>
           </div>
+          <span className="md:hidden">{toTitleCase(day)}</span>
         </div>
       </TooltipTrigger>
       <TooltipContent side="left">{toTitleCase(day)}</TooltipContent>

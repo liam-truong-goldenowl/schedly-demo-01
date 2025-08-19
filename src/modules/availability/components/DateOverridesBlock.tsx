@@ -19,7 +19,7 @@ export function DateOverridesBlock() {
         <div>
           <Heading
             level={'h3'}
-            className="text-copy-14 mb-0 inline-flex items-center gap-1.5"
+            className="mb-0 inline-flex items-center gap-1.5"
           >
             <IconCalendarEvent size={18} />
             Date-specific Hours
