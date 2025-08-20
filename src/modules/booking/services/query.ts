@@ -12,26 +12,24 @@ export function fetchEventDetails(eventSlug: string) {
       host: z.object({
         name: z.string(),
       }),
-      location: z.object({
-        type: z.string(),
-        details: z.string(),
-      }),
       timezone: z.string(),
+      inviteeLimit: z.number(),
     }),
     throw: true,
   });
 }
 
-export function fetchTimeSlots(query: {
-  month: string;
-  eventId: number;
-  timezone: string;
-}) {
+export function fetchTimeSlots(query: { month: string; eventId: number }) {
   return clientApi(`@get/bookings/time-slots`, {
     output: z.array(
       z.object({
         date: z.string(),
-        slots: z.array(z.string()),
+        slots: z.array(
+          z.object({
+            slot: z.string(),
+            remaining: z.number(),
+          }),
+        ),
       }),
     ),
     query,

@@ -4,6 +4,8 @@ import { DateTime } from 'luxon';
 import { XIcon, MinusIcon } from 'lucide-react';
 
 import { formatTime } from '@/shared/lib/utils';
+import { MapItem } from '@/shared/components/MapItem';
+import { MapList } from '@/shared/components/MapList';
 import { Button } from '@/shared/components/ui/button';
 
 import { DateOverride } from '../schemas';
@@ -41,37 +43,42 @@ export function OverriddenDateList({
 
   return (
     <ul className="space-y-4">
-      {Object.entries(groupedByDate).map(([date, overrides]) => (
-        <li
-          key={date}
-          className="bg-muted/50 flex items-start gap-4 rounded p-3"
-        >
-          <span className="w-[16ch]">{date}</span>
-          <ul className="grow space-y-2">
-            {overrides?.map((override) => (
-              <li key={override.id} className="">
-                {!override.endTime && !override.startTime ? (
-                  <span className="py-0.5">Unavailable</span>
-                ) : (
-                  <div className="flex items-center gap-2">
-                    <span>{formatTime(override.startTime!)}</span>
-                    <MinusIcon size={12} />
-                    <span>{formatTime(override.endTime!)}</span>
-                  </div>
-                )}
-              </li>
-            ))}
-          </ul>
-          <Button
-            className="ms-auto"
-            size={'icon'}
-            variant={'ghost'}
-            onClick={() => handleDelete(overrides!.map((o) => o.id))}
+      <MapItem
+        items={Object.entries(groupedByDate)}
+        itemKey={({ item: [date] }) => date}
+        render={({ item: [date, overrides = []], key }) => (
+          <li
+            key={key}
+            className="bg-muted/50 flex items-center justify-between gap-4 rounded p-3"
           >
-            <XIcon />
-          </Button>
-        </li>
-      ))}
+            <span className="w-[10ch]">{date}</span>
+            <MapList
+              items={overrides}
+              itemKey={({ item }) => item.id}
+              render={({ item: override }) => (
+                <div>
+                  {!override.endTime && !override.startTime ? (
+                    <span>Unavailable</span>
+                  ) : (
+                    <div className="flex items-center gap-2">
+                      <span>{formatTime(override.startTime!)}</span>
+                      <MinusIcon size={12} />
+                      <span>{formatTime(override.endTime!)}</span>
+                    </div>
+                  )}
+                </div>
+              )}
+            />
+            <Button
+              size={'icon'}
+              variant={'ghost'}
+              onClick={() => handleDelete(overrides.map((o) => o.id))}
+            >
+              <XIcon />
+            </Button>
+          </li>
+        )}
+      />
     </ul>
   );
 }

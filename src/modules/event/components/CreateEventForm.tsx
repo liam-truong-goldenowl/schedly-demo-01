@@ -1,20 +1,19 @@
 'use client';
 
 import z from 'zod';
-import { toast } from 'sonner';
 import { useState } from 'react';
+import pluralize from 'pluralize';
 import { useForm } from 'react-hook-form';
 import { useRouter } from 'next/navigation';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { ClockIcon, MinusIcon, PersonStandingIcon } from 'lucide-react';
 
+import { cn } from '@/shared/lib/utils';
 import { Input } from '@/shared/components/ui/input';
-import { cn, toTitleCase } from '@/shared/lib/utils';
+import { MapList } from '@/shared/components/MapList';
 import { Button } from '@/shared/components/ui/button';
 import { Textarea } from '@/shared/components/ui/textarea';
-import { PhoneInput } from '@/shared/components/PhoneInput';
 import { Separator } from '@/shared/components/ui/separator';
-import { EventType, LocationType } from '@/shared/constants/event';
 import { SelectNative } from '@/shared/components/ui/select-native';
 import { StatefulButton } from '@/shared/components/ui/stateful-button';
 import { RequiredInputIndicator } from '@/shared/components/RequiredInputIndicator';
@@ -28,9 +27,8 @@ import {
   FormDescription,
 } from '@/shared/components/ui/form';
 
-import { useSchedulesQuery } from '../hooks/useSchedulesQuery';
-import { useEventTypeParam } from '../hooks/useEventTypeParam';
 import { useEventMutations } from '../hooks/useEventMutations';
+import { useSchedulesQuery } from '../hooks/useSchedulesQuery';
 
 import { DetailsDisclosure } from './DetailsDisclosure';
 
@@ -42,57 +40,44 @@ const formSchema = z.object({
     .optional(),
   duration: z
     .number('Duration must be specified')
-    .min(1, 'Duration must be at least 1 minute'),
-  locationDetails: z
-    .string("Location details can't be empty")
-    .min(1, 'Location details are required')
-    .max(255, 'Location details must be 255 characters or less'),
+    .min(10, 'Duration must be at least 10 minutes')
+    .max(480, 'Duration cannot exceed 480 minutes'),
   inviteeLimit: z
     .number('Invitee limit must be a number')
     .min(1, 'Invitee limit must be at least 1')
     .max(100, 'Invitee limit cannot exceed 100'),
 });
 
+const DURATION_OPTIONS = [15, 30, 45, 60, 90, 150];
+const INVITEE_LIMIT_OPTIONS = [1, 2, 3, 4, 5, 10, 20];
+
 export function CreateEventForm() {
   const router = useRouter();
-  const { eventType } = useEventTypeParam();
-  const { isLoading, data: schedules } = useSchedulesQuery();
-  const { createEvent, isCreatingEvent } = useEventMutations();
-
-  const [scheduleId, setScheduleId] = useState<number | undefined>();
-  const [locationType, setLocationType] = useState<string>(
-    LocationType.IN_PERSON,
-  );
-
-  const selectedSchedule =
-    schedules?.find((schedule) => schedule.id === scheduleId) || schedules?.[0];
-  const DURATION_OPTIONS = [15, 30, 45, 60, 90, 150];
-  const INVITEE_LIMIT_OPTIONS = [1, 2, 3, 4, 5, 10, 20];
-
   const form = useForm<z.infer<typeof formSchema>>({
     defaultValues: {
       name: '',
       description: '',
       duration: 30,
       inviteeLimit: 1,
-      locationDetails: '',
     },
     resolver: zodResolver(formSchema),
   });
 
+  const { isLoading, data: schedules = [] } = useSchedulesQuery();
+  const { createEvent, isCreatingEvent } = useEventMutations();
+
+  const [scheduleId, setScheduleId] = useState<number | undefined>();
+
+  const selectedSchedule =
+    schedules.find((s) => s.id === scheduleId) ?? schedules[0];
+
   async function onSubmit(data: z.infer<typeof formSchema>) {
-    try {
-      await createEvent({
-        ...data,
-        locationType,
-        scheduleId: scheduleId || selectedSchedule!.id,
-        type: eventType,
-      });
-      form.reset();
-      router.push('/events');
-    } catch {
-      toast.error('Failed to create event. Please try again.');
-    }
+    await createEvent({
+      ...data,
+      scheduleId: scheduleId || selectedSchedule!.id,
+    });
+    form.reset();
+    router.push('/events');
   }
 
   function handleCancel() {
@@ -103,8 +88,8 @@ export function CreateEventForm() {
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
         <FormField
-          control={form.control}
           name="name"
+          control={form.control}
           disabled={isCreatingEvent}
           render={({ field }) => (
             <FormItem>
@@ -125,7 +110,7 @@ export function CreateEventForm() {
           summary={
             <div className="text-copy-14 flex items-center">
               <ClockIcon size={14} className="me-1.5" />
-              {form.watch('duration')} min
+              <span>{form.watch('duration')} min</span>
             </div>
           }
         >
@@ -136,41 +121,47 @@ export function CreateEventForm() {
             render={({ field }) => (
               <FormItem>
                 <FormLabel className="sr-only">Duration</FormLabel>
-                <FormDescription className="flex items-center gap-1">
-                  <span>In minutes</span>
-                  <MinusIcon size={14} className="mx-1" />
+                <FormDescription className="mb-1 flex items-center gap-1">
                   <span>Minimum: 1 min</span>
                   <MinusIcon size={14} className="mx-1" />
                   <span>Maximum: 480 min</span>
                 </FormDescription>
                 <div className="flex items-center justify-between gap-2">
-                  <div className="relative">
-                    <FormControl>
+                  <FormControl className="relative">
+                    <div>
                       <Input
                         {...field}
-                        min={1}
+                        min={10}
                         max={480}
+                        step={5}
                         type="number"
                         className="w-20 pe-8.5"
                       />
-                    </FormControl>
-                    <span className="bg-background text-copy-14 text-muted-foreground absolute top-1/2 right-2 -translate-y-1/2 transform">
-                      min
-                    </span>
-                  </div>
-                  <ul className="text-muted-foreground flex flex-wrap gap-2">
-                    {DURATION_OPTIONS.map((duration) => (
-                      <li key={duration}>
-                        <button
-                          className="text-copy-14 hover:bg-accent hover:text-accent-foreground active:text-accent-foreground active:bg-accent cursor-pointer rounded-full border px-4 py-1"
-                          type="button"
-                          onClick={() => field.onChange(duration)}
-                        >
-                          {duration}
-                        </button>
-                      </li>
-                    ))}
-                  </ul>
+                      <span className="bg-background text-copy-14 text-muted-foreground absolute top-1/2 right-2 -translate-y-1/2">
+                        min
+                      </span>
+                    </div>
+                  </FormControl>
+                  <MapList
+                    className="text-muted-foreground flex flex-wrap gap-2"
+                    items={DURATION_OPTIONS}
+                    itemKey={({ item }) => item}
+                    render={({ item }) => (
+                      <button
+                        className={cn(
+                          'text-copy-14 cursor-pointer',
+                          'rounded-full border px-4 py-1',
+                          'hover:bg-accent/50 hover:text-accent-foreground',
+                          'active:text-accent-foreground active:bg-accent',
+                          form.watch('duration') === item && 'bg-accent',
+                        )}
+                        type="button"
+                        onClick={() => field.onChange(item)}
+                      >
+                        {item}
+                      </button>
+                    )}
+                  />
                 </div>
                 <FormMessage />
               </FormItem>
@@ -179,113 +170,10 @@ export function CreateEventForm() {
         </DetailsDisclosure>
         <Separator />
         <DetailsDisclosure
-          title="Location"
-          isInvalid={!!form.formState.errors.locationDetails}
-          summary={
-            <p className="text-copy-14 flex items-center gap-1">
-              {form.watch('locationDetails') && (
-                <>
-                  <span className="font-medium">
-                    {toTitleCase(locationType)}{' '}
-                  </span>
-                  <MinusIcon size={14} />
-                </>
-              )}
-              <span className="text-gray-600">
-                {form.watch('locationDetails') ||
-                  'e.g. Phone number, Zoom link, Meeting ID, or physical address'}
-              </span>
-            </p>
-          }
-        >
-          <div className="space-y-5">
-            <ul className="flex gap-2">
-              {Object.entries(LocationType).map(([key, value]) => (
-                <li key={key}>
-                  <button
-                    type="button"
-                    className={cn(
-                      'hover:bg-accent hover:text-accent-foreground active:bg-accent active:text-accent-foreground cursor-pointer rounded-full border px-4 py-1 text-sm',
-                      locationType === value &&
-                        'bg-accent/50 text-accent-foreground border-primary',
-                    )}
-                    disabled={isCreatingEvent}
-                    onClick={() => {
-                      form.setValue('locationDetails', '');
-                      setLocationType(value as keyof typeof LocationType);
-                    }}
-                  >
-                    {toTitleCase(value)}
-                  </button>
-                </li>
-              ))}
-            </ul>
-
-            {locationType === LocationType.IN_PERSON && (
-              <FormField
-                control={form.control}
-                name="locationDetails"
-                disabled={isCreatingEvent}
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>
-                      Address <RequiredInputIndicator />
-                    </FormLabel>
-                    <FormControl>
-                      <Textarea
-                        {...field}
-                        placeholder="e.g. Physical address"
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-            )}
-            {locationType === LocationType.PHONE && (
-              <FormField
-                control={form.control}
-                name="locationDetails"
-                disabled={isCreatingEvent}
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>
-                      Phone Number <RequiredInputIndicator />
-                    </FormLabel>
-                    <FormControl>
-                      <PhoneInput {...field} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-            )}
-            {locationType === LocationType.ONLINE && (
-              <FormField
-                control={form.control}
-                name="locationDetails"
-                disabled={isCreatingEvent}
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>
-                      Online room details <RequiredInputIndicator />
-                    </FormLabel>
-                    <FormControl>
-                      <Textarea {...field} placeholder="e.g. Zoom link " />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-            )}
-          </div>
-        </DetailsDisclosure>
-        <Separator />
-        <DetailsDisclosure
           title="Availability"
           summary={
             isLoading ? (
-              <p className="text-copy-14">Loading schedules...</p>
+              <p className="text-copy-14">Loading your schedules...</p>
             ) : (
               <p className="text-copy-14">
                 {selectedSchedule?.name}{' '}
@@ -312,13 +200,14 @@ export function CreateEventForm() {
             </SelectNative>
           )}
         </DetailsDisclosure>
-        <Separator
-          className={eventType == EventType.ONE_ON_ONE ? 'hidden' : ''}
-        />
+        <Separator />
         <DetailsDisclosure
-          title="Limits and Buffers"
-          summary={<p className="text-copy-14">Buffer times, max limits</p>}
-          className={eventType == EventType.ONE_ON_ONE ? 'hidden' : ''}
+          title="Limits"
+          summary={
+            <p className="text-copy-14">
+              Maximum {pluralize('invitee', form.watch('inviteeLimit'), true)}
+            </p>
+          }
         >
           <FormField
             control={form.control}
@@ -327,34 +216,44 @@ export function CreateEventForm() {
             render={({ field }) => (
               <FormItem>
                 <div className="flex items-center justify-between">
-                  <FormLabel>
-                    Invitee Limit <RequiredInputIndicator />
-                  </FormLabel>
+                  <FormLabel>Invitee Limit</FormLabel>
                   <FormDescription>Maximum number of invitees</FormDescription>
                 </div>
                 <div className="flex items-center justify-between gap-2">
                   <div className="relative">
                     <FormControl>
-                      <Input type="number" {...field} className="w-20 pe-8.5" />
+                      <Input
+                        type="number"
+                        {...field}
+                        onChange={(e) => field.onChange(Number(e.target.value))}
+                        className="w-20 pe-8.5"
+                      />
                     </FormControl>
                     <span className="bg-background text-copy-14 text-muted-foreground absolute top-1/2 right-2 -translate-y-1/2 transform">
                       <PersonStandingIcon size={18} />
                     </span>
                   </div>
-                  <ul className="text-muted-foreground flex flex-wrap gap-2">
-                    {INVITEE_LIMIT_OPTIONS.map((inviteeCount) => (
-                      <li key={inviteeCount}>
-                        <button
-                          type="button"
-                          disabled={isCreatingEvent}
-                          onClick={() => field.onChange(inviteeCount)}
-                          className="text-copy-14 hover:bg-accent hover:text-accent-foreground cursor-pointer rounded-full border px-4 py-1"
-                        >
-                          {inviteeCount}
-                        </button>
-                      </li>
-                    ))}
-                  </ul>
+                  <MapList
+                    className="text-muted-foreground flex flex-wrap gap-2"
+                    items={INVITEE_LIMIT_OPTIONS}
+                    itemKey={({ item }) => item}
+                    render={({ item }) => (
+                      <button
+                        type="button"
+                        disabled={isCreatingEvent}
+                        onClick={() => field.onChange(item)}
+                        className={cn(
+                          'text-copy-14 cursor-pointer',
+                          'rounded-full border px-4 py-1',
+                          'hover:bg-accent/50 hover:text-accent-foreground',
+                          'active:text-accent-foreground active:bg-accent',
+                          form.watch('inviteeLimit') === item && 'bg-accent',
+                        )}
+                      >
+                        {item}
+                      </button>
+                    )}
+                  />
                 </div>
                 <FormMessage />
               </FormItem>

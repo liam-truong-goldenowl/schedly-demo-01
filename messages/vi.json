@@ -13,13 +13,12 @@
 
   "LanguageSwitch": {
     "en": "Tiếng Anh",
-    "de": "Tiếng Đức",
     "vi": "Tiếng Việt"
   },
 
   "Header": {
     "login": "Đăng nhập",
-    "sign-up": "Bắt đầu"
+    "sign-up": "Đăng ký"
   },
 
   "Footer": {
@@ -31,18 +30,18 @@
     "subtitle": "Đăng ký để bắt đầu",
     "description": "Vui lòng điền vào biểu mẫu bên dưới để tạo tài khoản.",
     "email": {
-      "label": "Nhập email của bạn để bắt đầu",
+      "label": "Email",
       "placeholder": "email.address@mail.com",
       "error": "Vui lòng nhập địa chỉ email hợp lệ",
       "apiError": "Email này đã được sử dụng. Vui lòng thử một cái khác."
     },
     "name": {
-      "label": "Nhập tên đầy đủ của bạn",
+      "label": "Tên",
       "placeholder": "John Doe",
-      "error": "Tên phải có mặt"
+      "error": "Tên không được để trống"
     },
     "password": {
-      "label": "Chọn một mật khẩu mạnh",
+      "label": "Mật khẩu",
       "error": "Mật khẩu phải đáp ứng các yêu cầu sau",
       "requirements": {
         "minLength": "Ít nhất 8 ký tự",

@@ -6,7 +6,10 @@ export function Description({
   ...props
 }: React.ComponentProps<'p'>) {
   return (
-    <p className={cn('text-copy-13 text-gray-600', className)} {...props}>
+    <p
+      className={cn('text-copy-13 text-pretty text-gray-600', className)}
+      {...props}
+    >
       {children}
     </p>
   );
