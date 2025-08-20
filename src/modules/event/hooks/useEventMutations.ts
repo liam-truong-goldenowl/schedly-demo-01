@@ -10,6 +10,7 @@ export function useEventMutations() {
     mutationFn: createEvent,
     onSettled: () => {
       queryClient.invalidateQueries({ queryKey: ['events'] });
+      queryClient.invalidateQueries({ queryKey: ['event-select'] });
     },
     onError: () => {
       toast.error('Failed to create event. Please try again.');
@@ -20,6 +21,7 @@ export function useEventMutations() {
     mutationFn: deleteEvent,
     onSettled: () => {
       queryClient.invalidateQueries({ queryKey: ['events'] });
+      queryClient.invalidateQueries({ queryKey: ['event-select'] });
     },
   });
 

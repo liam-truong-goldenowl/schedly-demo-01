@@ -18,9 +18,12 @@ type EventItemProps = {
     id: number;
     name: string;
     duration: number;
-    scheduleId: number;
     description?: string;
     slug: string;
+    schedule: {
+      name: string;
+      id: number;
+    };
   };
 };
 
@@ -36,6 +39,12 @@ export function EventItem({ event }: EventItemProps) {
             <ClockIcon className="size-4" />
             {event.duration} min
           </span>
+          <Link
+            href={`/availability?scheduleId=${event.schedule.id}`}
+            className="hover:underline"
+          >
+            {event.schedule.name}
+          </Link>
         </div>
       </section>
       <EventItemActions event={event} />

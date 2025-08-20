@@ -101,3 +101,9 @@ export function convertTimezone({
     time: otherDt.toFormat('HH:mm'),
   };
 }
+
+export function addMinutes(time: string, minutes: number): string {
+  const dt = DateTime.fromFormat(time, 'HH:mm:ss');
+  const newDt = dt.plus({ minutes });
+  return newDt.toFormat('HH:mm a');
+}

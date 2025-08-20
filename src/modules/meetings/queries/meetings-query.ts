@@ -1,41 +1,38 @@
-import z from 'zod';
-import { queryOptions } from '@tanstack/react-query';
+import { infiniteQueryOptions } from '@tanstack/react-query';
 
 import { clientApiWithAuth } from '@/shared/lib/client-api';
+import { makeCursorPaginationSchema } from '@/shared/schemas';
+
+import { MeetingSchema } from '../schemas';
 
 export const meetingsQuery = (query: {
   period: string;
-  startDate?: string;
-  endDate?: string;
+  eventType: string | null;
 }) =>
-  queryOptions({
-    staleTime: 60 * 1_000,
+  infiniteQueryOptions({
     queryKey: ['meetings', query],
-    queryFn: async () => {
-      return clientApiWithAuth('@get/meetings', {
-        throw: true,
-        query,
-        output: z.array(
-          z.object({
-            id: z.number(),
-            note: z.string().nullable(),
-            startDate: z.string(),
-            startTime: z.string(),
-            timezone: z.string(),
-            event: z.object({
-              id: z.number(),
-              name: z.string(),
-              description: z.string(),
-              inviteeLimit: z.number(),
-            }),
-            invitees: z.array(
-              z.object({
-                name: z.string(),
-                email: z.string(),
-              }),
-            ),
-          }),
-        ),
-      });
-    },
+    queryFn: async ({ pageParam: cursor }) => getMeetings({ ...query, cursor }),
+    initialPageParam: null as null | string,
+    getNextPageParam: (lastPage) =>
+      lastPage.hasNextPage ? lastPage.nextCursor : null,
   });
+
+async function getMeetings({
+  period,
+  cursor,
+  eventType,
+}: {
+  period: string;
+  cursor?: string | null;
+  eventType: string | null;
+}) {
+  return await clientApiWithAuth('@get/meetings', {
+    query: {
+      period,
+      cursor,
+      eventSlug: eventType,
+    },
+    output: makeCursorPaginationSchema(MeetingSchema),
+    throw: true,
+  });
+}
