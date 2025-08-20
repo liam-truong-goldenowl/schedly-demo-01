@@ -3,6 +3,7 @@
 import { RepeatIcon } from 'lucide-react';
 
 import { WEEKDAYS } from '@/shared/constants/day';
+import { MapItem } from '@/shared/components/MapItem';
 import { Heading } from '@/shared/components/layout/Heading';
 import { DayIndicator } from '@/shared/components/DayIndicator';
 import { TimezoneSelect } from '@/shared/components/TimezoneSelect';
@@ -37,24 +38,31 @@ export function WeeklyHoursBlock() {
           <RepeatIcon size={18} />
           Weekly Hours
         </Heading>
-        <Description>
+        <Description className="text-copy-14 md:text-copy-16">
           Set when you are typically available for meetings
         </Description>
       </header>
-
       <ul className="space-y-6">
-        {WEEKDAYS.map((day) => (
-          <li key={day} className="flex items-start gap-4">
-            <DayIndicator day={day} />
-            <DayIntervalList
-              day={day}
-              weeklyHours={activeSchedule.weeklyHours}
-            />
-            <AddDayIntervalButton day={day} />
-          </li>
-        ))}
+        <MapItem
+          items={WEEKDAYS}
+          itemKey={({ item }) => item}
+          render={({ item, key }) => (
+            <li
+              key={key}
+              className="flex flex-col items-start gap-1 md:flex-row md:gap-4"
+            >
+              <DayIndicator day={item} />
+              <div className="flex items-start gap-1 md:gap-4">
+                <DayIntervalList
+                  day={item}
+                  weeklyHours={activeSchedule.weeklyHours}
+                />
+                <AddDayIntervalButton day={item} />
+              </div>
+            </li>
+          )}
+        />
       </ul>
-
       <TimezoneSelect
         key={activeScheduleId}
         defaultTz={activeSchedule.timezone}

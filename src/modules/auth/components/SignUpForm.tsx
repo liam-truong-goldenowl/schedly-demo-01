@@ -101,7 +101,7 @@ export function SignUpForm() {
   }
 
   return (
-    <Card className="mx-auto w-full max-w-110">
+    <Card className="mx-auto w-full max-w-110 max-sm:border-none max-sm:shadow-none">
       <CardHeader>
         <CardTitle className="text-heading-24">{t('title')}</CardTitle>
         <CardDescription>{t('description')}</CardDescription>

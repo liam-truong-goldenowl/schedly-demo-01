@@ -35,9 +35,10 @@ export function NavMain({
                 tooltip={item.title}
                 asChild
                 isActive={checkActive(item.url)}
+                className="h-10 font-medium"
               >
                 <Link href={item.url}>
-                  {item.icon && <item.icon />}
+                  {item.icon && <item.icon className="size-5! font-medium" />}
                   <span>{item.title}</span>
                 </Link>
               </SidebarMenuButton>

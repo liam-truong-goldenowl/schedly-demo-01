@@ -1,23 +1,25 @@
 import { Heading } from '@/shared/components/layout/Heading';
 import { EventList } from '@/modules/event/components/EventList';
+import { Description } from '@/shared/components/layout/Description';
+import { SearchEventInput } from '@/modules/event/components/SearchEventInput';
 import { CreateEventButton } from '@/modules/event/components/CreateEventButton';
-import { VisitLandingPageLink } from '@/modules/event/components/VisitLandingPageLink';
 
 export default function EventsPage() {
   return (
-    <main>
-      <div className="space-y-8">
-        <div className="flex items-center justify-between">
-          <Heading className="mb-0">Event Types</Heading>
-          <CreateEventButton />
-        </div>
+    <>
+      <header className="mb-8 flex items-center justify-between">
         <div>
-          <div className="flex items-center justify-end py-2">
-            <VisitLandingPageLink />
-          </div>
-          <EventList />
+          <Heading className="mb-0">Event Types</Heading>
+          <Description>
+            Create events to share for people to book on your calendar.
+          </Description>
         </div>
-      </div>
-    </main>
+        <CreateEventButton />
+      </header>
+      <main className="space-y-4">
+        <SearchEventInput />
+        <EventList />
+      </main>
+    </>
   );
 }

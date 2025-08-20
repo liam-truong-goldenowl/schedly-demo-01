@@ -10,10 +10,13 @@ import { NavMain } from '@/shared/components/layout/NavMain';
 import {
   Sidebar,
   SidebarHeader,
+  SidebarFooter,
   SidebarContent,
 } from '@/shared/components/ui/sidebar';
 
 import { DashboardLogo } from '../DashboardLogo';
+
+import { NavUser } from './NavUser';
 
 const data = {
   navMain: [
@@ -44,6 +47,9 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
       <SidebarContent>
         <NavMain items={data.navMain} />
       </SidebarContent>
+      <SidebarFooter>
+        <NavUser />
+      </SidebarFooter>
     </Sidebar>
   );
 }

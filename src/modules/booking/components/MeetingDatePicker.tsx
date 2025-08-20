@@ -1,15 +1,13 @@
 'use client';
 
-import { useMemo } from 'react';
 import { useSuspenseQuery } from '@tanstack/react-query';
 
 import { Calendar } from '@/shared/components/ui/calendar';
 
-import { timeSlotsQuery } from '../queries/time-slots-query';
 import { useDateQueryState } from '../hooks/useDateQueryState';
+import { useTimeSlotsQuery } from '../hooks/useTimeSlotsQuery';
 import { useMonthQueryState } from '../hooks/useMonthQueryState';
 import { eventDetailsQuery } from '../queries/event-details-query';
-import { useTimezoneQueryState } from '../hooks/useTimezoneQueryState';
 
 interface MeetingDatePickerProps {
   eventSlug: string;
@@ -19,21 +17,11 @@ export function MeetingDatePicker({ eventSlug }: MeetingDatePickerProps) {
   const today = new Date();
   const { date, setDate } = useDateQueryState();
   const { month, setMonthFromDate } = useMonthQueryState();
-  const { data: eventDetails } = useSuspenseQuery(eventDetailsQuery(eventSlug));
-  const { timezone } = useTimezoneQueryState();
-  const { data: timeSlots } = useSuspenseQuery(
-    timeSlotsQuery({
-      month: month,
-      eventId: eventDetails.id,
-      timezone: timezone,
-    }),
-  );
-  const unavailableDates = useMemo(
-    () =>
-      timeSlots
-        .filter((slot) => slot.slots.length == 0)
-        .map((slot) => new Date(slot.date)),
-    [timeSlots],
+  const { data: event } = useSuspenseQuery(eventDetailsQuery(eventSlug));
+  const { unavailableDates } = useTimeSlotsQuery(
+    event.id,
+    event.timezone,
+    event.duration,
   );
 
   function handleNextClick(date: Date) {
@@ -53,7 +41,7 @@ export function MeetingDatePicker({ eventSlug }: MeetingDatePickerProps) {
   }
 
   return (
-    <div className="bg-background p-6">
+    <div className="bg-background flex justify-center p-6">
       <Calendar
         mode="single"
         timeZone="utc"
@@ -72,7 +60,6 @@ export function MeetingDatePicker({ eventSlug }: MeetingDatePickerProps) {
 
 export function MeetingDatePickerFallback() {
   const { month } = useMonthQueryState();
-
   return (
     <div className="bg-background p-6">
       <div className="relative">
