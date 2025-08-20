@@ -31,18 +31,18 @@ export function MeetingTimePicker({ eventSlug }: MeetingTimePickerProps) {
   ) ?? { slots: [] };
 
   return (
-    <div className="bg-background flex w-50 flex-col p-6 pe-2">
+    <div className="bg-background flex flex-col p-6 pe-2 min-[1010px]:w-50">
       {date ? (
         <>
           <p className="mb-4 font-medium">{format(date, 'EEEE d')}</p>
           <div className="grow overflow-y-auto pointer-fine:pe-4">
-            <div className="grid gap-2">
+            <div className="grid gap-2 max-[1010px]:grid-cols-2">
               {dateSlots.map((slot) => (
                 <Button
                   key={slot.dstSlot}
                   size={'lg'}
                   variant={'outline'}
-                  className="active:bg-primary/10 w-full"
+                  className="active:bg-primary/10"
                   onClick={() => setSlot(slot.dstSlot)}
                 >
                   {formatTime(slot.dstSlot)}
@@ -60,7 +60,7 @@ export function MeetingTimePicker({ eventSlug }: MeetingTimePickerProps) {
 
 export function MeetingTimePickerFallback() {
   return (
-    <div className="bg-background w-50 space-y-4 p-6">
+    <div className="bg-background space-y-4 p-6 min-[1010px]:w-50">
       <Skeleton className="h-[1lh]" />
       <div className="space-y-2">
         {Array.from({ length: 5 }).map((_, index) => (

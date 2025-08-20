@@ -36,7 +36,7 @@ export function EventDetails({ eventSlug }: { eventSlug: string }) {
   }
 
   return (
-    <section className="bg-background max-w-prose min-w-xs p-6">
+    <section className="bg-background min-w-xs p-6 sm:max-w-prose">
       <header>
         <p className="text-copy-16 mb-1.5 font-semibold text-gray-500">
           {eventDetails.host.name}

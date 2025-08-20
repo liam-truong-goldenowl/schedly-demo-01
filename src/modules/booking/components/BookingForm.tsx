@@ -94,7 +94,7 @@ export function BookingForm({ eventSlug, hostSlug }: BookingFormProps) {
   const isFormDisabled = isCreatingBooking || isBooked;
 
   return (
-    <div className="bg-background w-sm p-6">
+    <div className="bg-background grow p-6 min-[1010px]:w-sm">
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-5">
           <FormField

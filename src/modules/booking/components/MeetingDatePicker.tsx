@@ -41,7 +41,7 @@ export function MeetingDatePicker({ eventSlug }: MeetingDatePickerProps) {
   }
 
   return (
-    <div className="bg-background p-6">
+    <div className="bg-background flex justify-center p-6">
       <Calendar
         mode="single"
         timeZone="utc"
@@ -60,7 +60,6 @@ export function MeetingDatePicker({ eventSlug }: MeetingDatePickerProps) {
 
 export function MeetingDatePickerFallback() {
   const { month } = useMonthQueryState();
-
   return (
     <div className="bg-background p-6">
       <div className="relative">

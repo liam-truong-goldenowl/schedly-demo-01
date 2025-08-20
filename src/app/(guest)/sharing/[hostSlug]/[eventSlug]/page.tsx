@@ -9,8 +9,8 @@ export default async function PublicEventPage({
   const { eventSlug, hostSlug } = await params;
 
   return (
-    <main className="bg-muted flex min-h-dvh items-center justify-center">
-      <div className="bg-border flex h-110 w-fit gap-0.5 overflow-clip rounded-lg border-2">
+    <main className="bg-muted flex min-h-dvh sm:items-center sm:justify-center">
+      <div className="bg-border flex w-full gap-0.5 overflow-clip rounded-lg max-[1010px]:flex-col sm:w-fit sm:border-2">
         <EventDetails eventSlug={eventSlug} />
         <BookingSteps eventSlug={eventSlug} hostSlug={hostSlug} />
       </div>
