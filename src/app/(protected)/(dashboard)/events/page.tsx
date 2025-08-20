@@ -1,6 +1,7 @@
 import { Heading } from '@/shared/components/layout/Heading';
 import { EventList } from '@/modules/event/components/EventList';
 import { Description } from '@/shared/components/layout/Description';
+import { SearchEventInput } from '@/modules/event/components/SearchEventInput';
 import { CreateEventButton } from '@/modules/event/components/CreateEventButton';
 
 export default function EventsPage() {
@@ -15,7 +16,8 @@ export default function EventsPage() {
         </div>
         <CreateEventButton />
       </header>
-      <main>
+      <main className="space-y-4">
+        <SearchEventInput />
         <EventList />
       </main>
     </>

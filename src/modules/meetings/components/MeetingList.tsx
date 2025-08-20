@@ -10,6 +10,8 @@ import { Heading } from '@/shared/components/layout/Heading';
 
 import { useMeetingsInfiniteQuery } from '../hooks/useMeetingsInfiniteQuery';
 
+import { EmptyMeetingList } from './EmptyMeetingList';
+
 export function MeetingList() {
   const {
     data,
@@ -51,11 +53,7 @@ export function MeetingList() {
   );
 
   if (meetings.length < 1) {
-    return (
-      <div className="bg-background grid place-content-center rounded-md border border-dashed p-6 text-gray-600">
-        No meetings found.
-      </div>
-    );
+    return <EmptyMeetingList />;
   }
 
   return (
