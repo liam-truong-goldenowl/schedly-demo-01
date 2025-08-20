@@ -13,13 +13,12 @@
 
   "LanguageSwitch": {
     "en": "English",
-    "de": "Deutsch",
     "vi": "Tiếng Việt"
   },
 
   "Header": {
     "login": "Log in",
-    "sign-up": "Get started"
+    "sign-up": "Sign up"
   },
 
   "Footer": {
@@ -31,18 +30,18 @@
     "subtitle": "Sign up to get started",
     "description": "Please fill in the form below to create an account.",
     "email": {
-      "label": "Enter your email to get started",
+      "label": "Email",
       "placeholder": "email.address@mail.com",
       "error": "Please enter a valid email address",
       "apiError": "This email is already in use. Please try another one."
     },
     "name": {
-      "label": "Enter your full name",
+      "label": "Your name",
       "placeholder": "John Doe",
       "error": "Name must be present"
     },
     "password": {
-      "label": "Choose a strong password",
+      "label": "Password",
       "error": "Password must meet the following requirements",
       "requirements": {
         "minLength": "At least 8 characters",
