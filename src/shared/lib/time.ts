@@ -79,3 +79,31 @@ export function isBefore(time1: string, time2: string): boolean {
 export function formatDate(date: Date) {
   return date.toISOString().split('T')[0];
 }
+
+export function convertTimezone({
+  srcTz,
+  dstTz,
+  date,
+  time,
+}: {
+  srcTz: string;
+  dstTz: string;
+  date: string;
+  time: string;
+}) {
+  const dt = DateTime.fromISO(`${date}T${time}`, { zone: srcTz });
+  const otherDt = dt.setZone(dstTz);
+  if (!otherDt.isValid) {
+    throw new Error('Invalid time');
+  }
+  return {
+    date: otherDt.toISODate(),
+    time: otherDt.toFormat('HH:mm'),
+  };
+}
+
+export function addMinutes(time: string, minutes: number): string {
+  const dt = DateTime.fromFormat(time, 'HH:mm:ss');
+  const newDt = dt.plus({ minutes });
+  return newDt.toFormat('HH:mm a');
+}

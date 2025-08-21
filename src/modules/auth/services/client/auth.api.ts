@@ -11,9 +11,7 @@ export async function signUp(userData: {
   return clientApi('@post/auth/signup', {
     body: userData,
     output: z.object({
-      name: z.string(),
-      email: z.email(),
-      publicSlug: z.string(),
+      email: z.string(),
     }),
   });
 }

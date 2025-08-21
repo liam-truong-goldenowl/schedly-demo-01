@@ -7,5 +7,6 @@ import { ScheduleSchema } from '../../schemas';
 export async function getSchedules() {
   return serverApiWithAuth('@get/schedules', {
     output: z.array(ScheduleSchema),
+    throw: true,
   });
 }
