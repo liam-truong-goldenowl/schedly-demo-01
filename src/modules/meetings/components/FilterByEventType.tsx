@@ -24,7 +24,7 @@ export function FilterByEventType() {
 
   return (
     <Select onValueChange={handleSelectChange} defaultValue={allEventType}>
-      <SelectTrigger className="w-[180px]">
+      <SelectTrigger className="bg-background w-[180px]">
         <SelectValue placeholder="Event Type" />
       </SelectTrigger>
       <SelectContent>
@@ -36,7 +36,11 @@ export function FilterByEventType() {
         )}
         {eventTypes &&
           eventTypes.map((eventType) => (
-            <SelectItem key={eventType.id} value={eventType.slug}>
+            <SelectItem
+              key={eventType.id}
+              value={eventType.slug}
+              className="truncate"
+            >
               {eventType.name}
             </SelectItem>
           ))}
