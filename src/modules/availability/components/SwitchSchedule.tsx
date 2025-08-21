@@ -11,7 +11,7 @@ export function SwitchSchedule() {
 
   return (
     <div>
-      <fieldset className="bg-border grid w-full grid-cols-3 gap-(--divider-size) pe-(--divider-size) [--divider-size:1px] sm:flex sm:w-fit">
+      <fieldset className="bg-border flex w-fit gap-(--divider-size) pe-(--divider-size) [--divider-size:1px]">
         <legend className="sr-only">select schedule</legend>
         <MapItem
           items={schedules}

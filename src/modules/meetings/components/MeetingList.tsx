@@ -92,7 +92,7 @@ export function MeetingList() {
                       <Heading level={'h4'} className="mb-1 font-normal">
                         Invitees:
                       </Heading>
-                      <details>
+                      <details className="overflow-x-auto">
                         <summary>
                           <span>
                             {meeting.invitees.length} /{' '}
@@ -111,7 +111,9 @@ export function MeetingList() {
                             <tbody className="divide-border divide-y-1">
                               {meeting.invitees.map((invitee) => (
                                 <tr key={invitee.email}>
-                                  <td className="p-1 pe-4">{invitee.name}</td>
+                                  <td className="p-1 pe-4 text-pretty">
+                                    {invitee.name}
+                                  </td>
                                   <td className="p-1 pe-4">{invitee.email}</td>
                                   <td className="p-1">{invitee.timezone}</td>
                                 </tr>
