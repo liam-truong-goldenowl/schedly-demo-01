@@ -17,6 +17,7 @@ export const meetingsQuery = (query: {
     initialPageParam: null as null | string,
     getNextPageParam: (lastPage) =>
       lastPage.hasNextPage ? lastPage.nextCursor : null,
+    refetchOnWindowFocus: true,
   });
 
 async function getMeetings({
