@@ -11,9 +11,9 @@ export default withSentryConfig(withNextIntl(nextConfig), {
   // For all available options, see:
   // https://www.npmjs.com/package/@sentry/webpack-plugin#options
 
-  org: 'liam-truong',
+  org: process.env.SENTRY_ORG,
 
-  project: 'schedly-demo-01',
+  project: process.env.SENTRY_PROJECT,
 
   // Only print logs for uploading source maps in CI
   silent: !process.env.CI,
