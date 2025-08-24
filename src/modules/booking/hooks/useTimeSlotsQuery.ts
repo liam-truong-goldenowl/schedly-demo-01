@@ -17,11 +17,9 @@ export function useTimeSlotsQuery(
   const { month } = useMonthQueryState();
   const { timezone: dstTz } = useTimezoneQueryState();
   const { data: srcTimeSlots } = useSuspenseQuery(
-    timeSlotsQuery({
-      month: month,
-      eventId,
-    }),
+    timeSlotsQuery({ month, eventId }),
   );
+
   const timeSlots = useMemo(() => {
     const timeSlotsMap = new Map<
       string,
@@ -41,7 +39,7 @@ export function useTimeSlotsQuery(
           date,
           time,
         });
-        timeSlotsMap.get(date)?.push({
+        timeSlotsMap.get(dstDate)?.push({
           srcSlot: time,
           dstSlot: dstTime,
           srcDate: date,
@@ -50,17 +48,17 @@ export function useTimeSlotsQuery(
         });
       });
     });
-
+    console.log(timeSlotsMap);
     const now = DateTime.now().setZone(srcTz).toISODate()!;
     const endTime = DateTime.now()
-      .setZone(srcTz)
+      .setZone(dstTz)
       .plus({ minutes: duration })
       .toFormat('HH:mm');
     const todaySlots = timeSlotsMap.get(now);
     if (todaySlots) {
       timeSlotsMap.set(
         now,
-        todaySlots.filter((slot) => slot.srcSlot > endTime),
+        todaySlots.filter((slot) => slot.dstSlot > endTime),
       );
     }
     return Array.from(timeSlotsMap.entries()).map(([date, slots]) => ({
