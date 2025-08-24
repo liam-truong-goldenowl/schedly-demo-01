@@ -1,5 +1,5 @@
-export const Period = {
-  FIXED: 'fixed',
-  UPCOMING: 'upcoming',
-  PAST: 'past',
-} as const;
+export enum Period {
+  FIXED = 'fixed',
+  UPCOMING = 'upcoming',
+  PAST = 'past',
+}
