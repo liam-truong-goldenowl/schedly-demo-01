@@ -8,6 +8,8 @@ import { MeetingSchema } from '../schemas';
 export const meetingsQuery = (query: {
   period: string;
   eventType: string | null;
+  startDate: string | null;
+  endDate: string | null;
 }) =>
   infiniteQueryOptions({
     queryKey: ['meetings', query],
@@ -15,22 +17,29 @@ export const meetingsQuery = (query: {
     initialPageParam: null as null | string,
     getNextPageParam: (lastPage) =>
       lastPage.hasNextPage ? lastPage.nextCursor : null,
+    refetchOnWindowFocus: true,
   });
 
 async function getMeetings({
   period,
   cursor,
   eventType,
+  startDate,
+  endDate,
 }: {
   period: string;
   cursor?: string | null;
   eventType: string | null;
+  startDate: string | null;
+  endDate: string | null;
 }) {
   return await clientApiWithAuth('@get/meetings', {
     query: {
       period,
       cursor,
       eventSlug: eventType,
+      startDate: startDate,
+      endDate: endDate,
     },
     output: makeCursorPaginationSchema(MeetingSchema),
     throw: true,
