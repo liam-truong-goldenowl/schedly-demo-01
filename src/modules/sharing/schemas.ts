@@ -8,4 +8,8 @@ export const EventSchema = z.object({
 });
 
 export const EventListSchema = z.array(EventSchema);
-export type EventList = z.infer<typeof EventListSchema>;
+
+export const HostSchema = z.object({
+  id: z.number(),
+  name: z.string(),
+});

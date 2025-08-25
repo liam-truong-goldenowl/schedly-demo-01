@@ -1,7 +1,6 @@
 import { api } from '@/shared/server/api';
 
-import { HostSchema } from '../schema/host';
-import { EventListSchema } from '../schema/event';
+import { HostSchema, EventListSchema } from './schemas';
 
 export async function fetchHost(slug: string) {
   return api('@get/sharing/:slug/host', {
