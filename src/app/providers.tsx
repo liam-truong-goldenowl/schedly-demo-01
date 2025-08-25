@@ -2,7 +2,7 @@ import { NextIntlClientProvider } from 'next-intl';
 import { NuqsAdapter } from 'nuqs/adapters/next/app';
 
 import { Toaster } from '@/shared/components/ui/sonner';
-import AuthProvider from '@/shared/components/providers/AuthProvider';
+import { AuthProvider } from '@/shared/components/providers/AuthProvider';
 import { ThemeProvider } from '@/shared/components/providers/ThemeProvider';
 import { QueryProvider } from '@/shared/components/providers/QueryProvider';
 
