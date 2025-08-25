@@ -151,6 +151,7 @@ export function BookingForm({ eventSlug, hostSlug }: BookingFormProps) {
               variant="ghost"
               onClick={handleBack}
               disabled={isCreatingBooking}
+              type="button"
             >
               Back
             </Button>
