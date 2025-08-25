@@ -1,6 +1,6 @@
 import { useQuery } from '@tanstack/react-query';
 
-import { Schedule } from '../schemas';
+import { Schedule } from '../types';
 import { getSchedules } from '../services/client/availability.api';
 
 export function useSchedulesQuery(initialData: Schedule[]) {

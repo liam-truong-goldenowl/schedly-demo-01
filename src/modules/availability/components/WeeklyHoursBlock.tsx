@@ -2,7 +2,7 @@
 
 import { RepeatIcon } from 'lucide-react';
 
-import { WEEKDAYS } from '@/shared/constants/day';
+import { WEEKDAYS } from '@/shared/constants';
 import { MapItem } from '@/shared/components/MapItem';
 import { Heading } from '@/shared/components/layout/Heading';
 import { DayIndicator } from '@/shared/components/DayIndicator';

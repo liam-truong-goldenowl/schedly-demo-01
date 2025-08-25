@@ -1,6 +1,6 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 
-import { Schedule } from '../schemas';
+import { Schedule } from '../types';
 import {
   createSchedule,
   deleteSchedule,

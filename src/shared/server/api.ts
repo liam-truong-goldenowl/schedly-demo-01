@@ -4,15 +4,14 @@ import { createFetch } from '@better-fetch/fetch';
 import { notFound, redirect } from 'next/navigation';
 
 import { env } from '../lib/env';
-
-import { authOptions } from './auth';
+import { nextAuthOptions } from '../lib/next-auth';
 
 export const api = createFetch({
   throw: true,
   credentials: 'include',
   baseURL: env.NEXT_PUBLIC_API_URL,
   onRequest: async (context) => {
-    const session = await getServerSession(authOptions);
+    const session = await getServerSession(nextAuthOptions);
 
     if (session) {
       context.headers.set('Authorization', `Bearer ${session.accessToken}`);

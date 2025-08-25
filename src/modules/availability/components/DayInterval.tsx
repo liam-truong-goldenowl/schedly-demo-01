@@ -5,7 +5,7 @@ import { useState } from 'react';
 import { isBefore, isOverlapping } from '@/shared/lib/time';
 import { TimeIntervalInput } from '@/shared/components/TimeIntervalInput';
 
-import { WeeklyHour } from '../schemas';
+import { WeeklyHour } from '../types';
 import { useScheduleMutations } from '../hooks/useScheduleMutations';
 
 interface DayIntervalProps {

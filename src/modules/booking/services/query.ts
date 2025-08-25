@@ -1,9 +1,9 @@
 import z from 'zod';
 
-import { clientApi } from '@/shared/lib/client-api';
+import { api } from '@/shared/lib/api';
 
 export function fetchEventDetails(eventSlug: string) {
-  return clientApi(`/events/${eventSlug}`, {
+  return api(`/events/${eventSlug}`, {
     output: z.object({
       id: z.number(),
       name: z.string(),
@@ -20,7 +20,7 @@ export function fetchEventDetails(eventSlug: string) {
 }
 
 export function fetchTimeSlots(query: { month: string; eventId: number }) {
-  return clientApi(`@get/bookings/time-slots`, {
+  return api(`@get/bookings/time-slots`, {
     output: z.array(
       z.object({
         date: z.string(),

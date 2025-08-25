@@ -2,7 +2,7 @@
 
 import { CirclePlusIcon } from 'lucide-react';
 
-import { Weekday } from '@/shared/schemas';
+import { Weekday } from '@/shared/enums';
 import { toTitleCase } from '@/shared/lib/utils';
 import { Button } from '@/shared/components/ui/button';
 import { findAvailableSlots } from '@/shared/lib/time';
