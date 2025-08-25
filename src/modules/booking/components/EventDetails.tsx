@@ -11,6 +11,7 @@ import {
   PersonStandingIcon,
 } from 'lucide-react';
 
+import { Skeleton } from '@/shared/components/ui/skeleton';
 import { Heading } from '@/shared/components/layout/Heading';
 import { TimezoneSelect } from '@/shared/components/TimezoneSelect';
 
@@ -85,6 +86,31 @@ export function EventDetails({ eventSlug }: { eventSlug: string }) {
               onChange={handleTimezoneChange}
             />
           )}
+        </div>
+      </div>
+    </section>
+  );
+}
+
+export function EventDetailsFallback() {
+  return (
+    <section className="bg-background min-w-xs p-6 sm:max-w-prose">
+      <header>
+        <Skeleton className="text-copy-16 mb-1.5 h-[1lh] w-1/3" />
+        <Skeleton className="text-copy-20 mb-4 h-[1lh] w-2/3" />
+      </header>
+      <div className="text-copy-14 space-y-3">
+        <div className="flex items-center gap-2">
+          <ClockIcon size={16} />
+          <Skeleton className="h-[1lh] w-[4ch]" />
+        </div>
+        <div className="flex items-center gap-2">
+          <PersonStandingIcon size={16} />
+          <Skeleton className="h-[1lh] w-[14ch]" />
+        </div>
+        <div className="flex items-center gap-2">
+          <GlobeIcon size={16} />
+          <Skeleton className="h-[1lh] w-[10ch]" />
         </div>
       </div>
     </section>
