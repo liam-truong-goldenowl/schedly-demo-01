@@ -12,5 +12,3 @@ export const EventSchema = z.object({
     name: z.string(),
   }),
 });
-
-export type Event = z.infer<typeof EventSchema>;

@@ -7,7 +7,5 @@ export const EventSchema = z.object({
   description: z.string().nullable(),
 });
 
-export type Event = z.infer<typeof EventSchema>;
-
 export const EventListSchema = z.array(EventSchema);
 export type EventList = z.infer<typeof EventListSchema>;
