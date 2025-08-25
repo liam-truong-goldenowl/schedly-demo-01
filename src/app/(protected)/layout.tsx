@@ -2,6 +2,7 @@ import { redirect } from 'next/navigation';
 import { getServerSession } from 'next-auth';
 
 import { nextAuthOptions } from '@/shared/lib/next-auth';
+import { AuthProvider } from '@/shared/components/providers/AuthProvider';
 
 export default async function ProtectedLayout({
   children,
@@ -14,5 +15,5 @@ export default async function ProtectedLayout({
     redirect('/login');
   }
 
-  return children;
+  return <AuthProvider>{children}</AuthProvider>;
 }

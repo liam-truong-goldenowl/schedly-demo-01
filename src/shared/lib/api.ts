@@ -26,3 +26,7 @@ export const api = createFetch({
     return context;
   },
 });
+
+export const publicApi = createFetch({
+  baseURL: env.NEXT_PUBLIC_API_URL,
+});

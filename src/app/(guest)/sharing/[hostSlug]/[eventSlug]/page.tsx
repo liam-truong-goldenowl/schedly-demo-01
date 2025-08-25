@@ -1,6 +1,9 @@
 import { Suspense } from 'react';
 
-import { BookingSteps } from '@/modules/booking/components/BookingSteps';
+import {
+  BookingSteps,
+  BookingStepsFallback,
+} from '@/modules/booking/components/BookingSteps';
 import {
   EventDetails,
   EventDetailsFallback,
@@ -19,7 +22,9 @@ export default async function PublicEventPage({
         <Suspense fallback={<EventDetailsFallback />}>
           <EventDetails eventSlug={eventSlug} />
         </Suspense>
-        <BookingSteps eventSlug={eventSlug} hostSlug={hostSlug} />
+        <Suspense fallback={<BookingStepsFallback />}>
+          <BookingSteps eventSlug={eventSlug} hostSlug={hostSlug} />
+        </Suspense>
       </div>
     </main>
   );

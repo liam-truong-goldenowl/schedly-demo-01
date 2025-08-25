@@ -1,7 +1,5 @@
 'use client';
 
-import { Suspense } from 'react';
-
 import { useDateQueryState } from '../hooks/useDateQueryState';
 import { useSlotQueryState } from '../hooks/useSlotQueryState';
 
@@ -32,14 +30,14 @@ export function BookingSteps({ eventSlug, hostSlug }: BookingStepsProps) {
   }
 
   return (
-    <Suspense fallback={<BookingStepsFallback />}>
+    <>
       <MeetingDatePicker eventSlug={eventSlug} />
       <MeetingTimePicker eventSlug={eventSlug} />
-    </Suspense>
+    </>
   );
 }
 
-function BookingStepsFallback() {
+export function BookingStepsFallback() {
   return (
     <>
       <MeetingDatePickerFallback />
