@@ -37,7 +37,7 @@ export function EventDetails({ eventSlug }: { eventSlug: string }) {
   }
 
   return (
-    <section className="bg-background min-w-xs p-6 sm:max-w-prose">
+    <section className="bg-background min-w-xs p-6 sm:max-w-[52ch]">
       <header>
         <p className="text-copy-16 mb-1.5 font-semibold text-gray-500">
           {eventDetails.host.name}
@@ -48,7 +48,7 @@ export function EventDetails({ eventSlug }: { eventSlug: string }) {
       </header>
       <div className="text-copy-14 space-y-3">
         {eventDetails.description && (
-          <p className="text-copy-14 mb-2 text-gray-500">
+          <p className="text-copy-14 mb-2 text-pretty text-gray-500">
             {eventDetails.description}
           </p>
         )}
