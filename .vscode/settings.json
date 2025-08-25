@@ -2,22 +2,5 @@
   "editor.codeActionsOnSave": {
     "source.fixAll.eslint": "explicit"
   },
-  "cSpell.words": ["NEXTAUTH", "Nuqs", "Schedly"],
-  "files.exclude": {
-    "**/.git": true,
-    "**/.svn": true,
-    "**/.hg": true,
-    "**/.DS_Store": true,
-    "**/Thumbs.db": true,
-    ".vercel": true,
-    ".next": true,
-    "node_modules": true,
-    ".gitignore": true,
-    ".node-version": true,
-    ".prettierrc": true,
-    "{commitlint,eslint,postcss,next}.config.*": true,
-    "lefthook.*": true,
-    "components.json": true,
-    "vitest.shims.*": true
-  }
+  "cSpell.words": ["NEXTAUTH", "Nuqs", "Schedly"]
 }

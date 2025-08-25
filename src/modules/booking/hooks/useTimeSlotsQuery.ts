@@ -48,7 +48,7 @@ export function useTimeSlotsQuery(
         });
       });
     });
-    console.log(timeSlotsMap);
+
     const now = DateTime.now().setZone(srcTz).toISODate()!;
     const endTime = DateTime.now()
       .setZone(dstTz)

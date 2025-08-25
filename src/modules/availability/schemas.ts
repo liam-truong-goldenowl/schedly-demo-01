@@ -24,7 +24,3 @@ export const ScheduleSchema = z.object({
   weeklyHours: z.array(WeeklyHourSchema),
   dateOverrides: z.array(DateOverrideSchema),
 });
-
-export type Schedule = z.infer<typeof ScheduleSchema>;
-export type WeeklyHour = z.infer<typeof WeeklyHourSchema>;
-export type DateOverride = z.infer<typeof DateOverrideSchema>;

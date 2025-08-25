@@ -1,7 +1,7 @@
 import z from 'zod';
 
-import { Weekday } from '@/shared/schemas';
-import { clientApiWithAuth } from '@/shared/lib/client-api';
+import { api } from '@/shared/lib/api';
+import { Weekday } from '@/shared/enums';
 
 import {
   ScheduleSchema,
@@ -10,7 +10,7 @@ import {
 } from '../../schemas';
 
 export async function createSchedule(body: { name: string; timezone: string }) {
-  return clientApiWithAuth('@post/schedules', {
+  return api('@post/schedules', {
     body,
     output: ScheduleSchema,
     throw: true,
@@ -18,14 +18,14 @@ export async function createSchedule(body: { name: string; timezone: string }) {
 }
 
 export async function getSchedules() {
-  return clientApiWithAuth('@get/schedules', {
+  return api('@get/schedules', {
     output: z.array(ScheduleSchema),
     throw: true,
   });
 }
 
 export async function deleteSchedule(scheduleId: number) {
-  return clientApiWithAuth(`@delete/schedules/${scheduleId}`, {
+  return api(`@delete/schedules/${scheduleId}`, {
     throw: true,
   });
 }
@@ -37,7 +37,7 @@ export function updateTimezone({
   timezone: string;
   scheduleId: number;
 }) {
-  return clientApiWithAuth(`@patch/schedules/${scheduleId}`, {
+  return api(`@patch/schedules/${scheduleId}`, {
     body: { timezone },
     throw: true,
   });
@@ -50,10 +50,9 @@ export function deleteWeeklyHour({
   scheduleId: number;
   weeklyHourId: number;
 }) {
-  return clientApiWithAuth(
-    `@delete/schedules/${scheduleId}/weekly-hours/${weeklyHourId}`,
-    { throw: true },
-  );
+  return api(`@delete/schedules/${scheduleId}/weekly-hours/${weeklyHourId}`, {
+    throw: true,
+  });
 }
 
 export function createWeeklyHour({
@@ -63,7 +62,7 @@ export function createWeeklyHour({
   scheduleId: number;
   body: { weekday: Weekday; startTime: string; endTime: string };
 }) {
-  return clientApiWithAuth(`@post/schedules/${scheduleId}/weekly-hours`, {
+  return api(`@post/schedules/${scheduleId}/weekly-hours`, {
     body,
     output: WeeklyHourSchema,
     throw: true,
@@ -79,14 +78,11 @@ export function updateWeeklyHour({
   weeklyHourId: number;
   body: { startTime: string; endTime: string };
 }) {
-  return clientApiWithAuth(
-    `@patch/schedules/${scheduleId}/weekly-hours/${weeklyHourId}`,
-    {
-      body,
-      output: WeeklyHourSchema,
-      throw: true,
-    },
-  );
+  return api(`@patch/schedules/${scheduleId}/weekly-hours/${weeklyHourId}`, {
+    body,
+    output: WeeklyHourSchema,
+    throw: true,
+  });
 }
 
 export function createDateOverride({
@@ -99,7 +95,7 @@ export function createDateOverride({
     dates: string[];
   };
 }) {
-  return clientApiWithAuth(`@post/schedules/${scheduleId}/date-overrides`, {
+  return api(`@post/schedules/${scheduleId}/date-overrides`, {
     body,
     output: z.array(DateOverrideSchema),
     throw: true,
@@ -113,7 +109,7 @@ export function deleteDateOverride({
   scheduleId: number;
   dateOverrideId: number;
 }) {
-  return clientApiWithAuth(
+  return api(
     `@delete/schedules/${scheduleId}/date-overrides/${dateOverrideId}`,
     { throw: true },
   );

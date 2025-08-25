@@ -1,16 +1,19 @@
 import { infiniteQueryOptions } from '@tanstack/react-query';
 
-import { clientApiWithAuth } from '@/shared/lib/client-api';
+import { api } from '@/shared/lib/api';
 import { makeCursorPaginationSchema } from '@/shared/schemas';
 
 import { MeetingSchema } from '../schemas';
 
-export const meetingsQuery = (query: {
+type Query = {
   period: string;
-  eventType: string | null;
+  cursor?: string | null;
+  eventSlug: string | null;
   startDate: string | null;
   endDate: string | null;
-}) =>
+};
+
+export const meetingsQuery = (query: Query) =>
   infiniteQueryOptions({
     queryKey: ['meetings', query],
     queryFn: async ({ pageParam: cursor }) => getMeetings({ ...query, cursor }),
@@ -20,27 +23,9 @@ export const meetingsQuery = (query: {
     refetchOnWindowFocus: true,
   });
 
-async function getMeetings({
-  period,
-  cursor,
-  eventType,
-  startDate,
-  endDate,
-}: {
-  period: string;
-  cursor?: string | null;
-  eventType: string | null;
-  startDate: string | null;
-  endDate: string | null;
-}) {
-  return await clientApiWithAuth('@get/meetings', {
-    query: {
-      period,
-      cursor,
-      eventSlug: eventType,
-      startDate: startDate,
-      endDate: endDate,
-    },
+async function getMeetings(query: Query) {
+  return await api('@get/meetings', {
+    query,
     output: makeCursorPaginationSchema(MeetingSchema),
     throw: true,
   });

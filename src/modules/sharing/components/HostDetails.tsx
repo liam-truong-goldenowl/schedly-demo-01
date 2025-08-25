@@ -1,11 +1,12 @@
 import { Heading } from '@/shared/components/layout/Heading';
 import { Description } from '@/shared/components/layout/Description';
 
-import { Host } from '../schema/host';
+import { Host } from '../types';
 
 type HostDetailsProps = {
   host: Host;
 };
+
 export function HostDetails({ host }: HostDetailsProps) {
   return (
     <section className="p-4 text-center">

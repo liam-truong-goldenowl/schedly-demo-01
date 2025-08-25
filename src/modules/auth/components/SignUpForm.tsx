@@ -5,8 +5,8 @@ import { toast } from 'sonner';
 import { useForm } from 'react-hook-form';
 import { useTranslations } from 'next-intl';
 import { useRouter } from 'next/navigation';
-import { useMemo, useTransition } from 'react';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { useMemo, useReducer, useTransition } from 'react';
 
 import { Input } from '@/shared/components/ui/input';
 import { StatefulButton } from '@/shared/components/ui/stateful-button';
@@ -30,7 +30,7 @@ import {
   AT_LEAST_ONE_LOWERCASE,
   AT_LEAST_ONE_UPPERCASE,
   AT_LEAST_EIGHT_CHARACTERS,
-} from '@/shared/constants/regex';
+} from '@/shared/constants';
 
 import { signUp } from '../services/client/auth.api';
 
@@ -40,6 +40,7 @@ export function SignUpForm() {
   const router = useRouter();
   const t = useTranslations('SignUpForm');
   const [isSignUpPending, startTransition] = useTransition();
+  const [isSignUpComplete, setIsSignUpComplete] = useReducer(() => true, false);
 
   const formSchema = useMemo(
     () =>
@@ -84,6 +85,8 @@ export function SignUpForm() {
         return;
       }
 
+      setIsSignUpComplete();
+
       const promise = () => {
         return new Promise((resolve) => {
           setTimeout(() => {
@@ -100,6 +103,8 @@ export function SignUpForm() {
     });
   }
 
+  const isFormDisabled = isSignUpPending || isSignUpComplete;
+
   return (
     <Card className="mx-auto w-full max-w-110 max-sm:border-none max-sm:shadow-none">
       <CardHeader>
@@ -112,15 +117,12 @@ export function SignUpForm() {
             <FormField
               control={form.control}
               name="email"
+              disabled={isFormDisabled}
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>{t('email.label')}</FormLabel>
                   <FormControl>
-                    <Input
-                      placeholder={t('email.placeholder')}
-                      disabled={isSignUpPending}
-                      {...field}
-                    />
+                    <Input placeholder={t('email.placeholder')} {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -129,15 +131,12 @@ export function SignUpForm() {
             <FormField
               control={form.control}
               name="name"
+              disabled={isFormDisabled}
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>{t('name.label')}</FormLabel>
                   <FormControl>
-                    <Input
-                      placeholder={t('name.placeholder')}
-                      disabled={isSignUpPending}
-                      {...field}
-                    />
+                    <Input placeholder={t('name.placeholder')} {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -146,20 +145,21 @@ export function SignUpForm() {
             <FormField
               control={form.control}
               name="password"
+              disabled={isFormDisabled}
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>{t('password.label')}</FormLabel>
                   <FormControl>
-                    <PasswordInputWithStrength
-                      disabled={isSignUpPending}
-                      {...field}
-                    />
+                    <PasswordInputWithStrength {...field} />
                   </FormControl>
                 </FormItem>
               )}
             />
             <div className="flex justify-end">
-              <StatefulButton loading={isSignUpPending}>
+              <StatefulButton
+                loading={isSignUpPending}
+                disabled={isFormDisabled}
+              >
                 {t('submitButton.text')}
               </StatefulButton>
             </div>

@@ -1,6 +1,6 @@
-import { Weekday } from '@/shared/schemas';
+import { Weekday } from '@/shared/enums';
 
-import { WeeklyHour } from '../schemas';
+import { WeeklyHour } from '../types';
 import { useActiveSchedule } from '../hooks/useActiveSchedule';
 
 import { DayInterval } from './DayInterval';

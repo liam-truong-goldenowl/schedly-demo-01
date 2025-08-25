@@ -102,8 +102,25 @@ export function convertTimezone({
   };
 }
 
+export function normalizeTimeFormat(time: string): DateTime {
+  let dt = null as null | DateTime;
+
+  ['HH:mm', 'HH:mm:ss'].forEach((format) => {
+    const parsed = DateTime.fromFormat(time, format);
+    if (parsed.isValid) {
+      dt = parsed;
+    }
+  });
+
+  if (!dt) {
+    throw new Error('Invalid time format');
+  }
+
+  return dt;
+}
+
 export function addMinutes(time: string, minutes: number): string {
-  const dt = DateTime.fromFormat(time, 'HH:mm:ss');
+  const dt = normalizeTimeFormat(time);
   const newDt = dt.plus({ minutes });
   return newDt.toFormat('HH:mm a');
 }

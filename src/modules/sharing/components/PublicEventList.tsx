@@ -3,7 +3,7 @@ import { PlayIcon } from 'lucide-react';
 
 import { Heading } from '@/shared/components/layout/Heading';
 
-import { EventList } from '../schema/event';
+import { EventList } from '../types';
 
 type PublicEventListProps = {
   hostSlug: string;

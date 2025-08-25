@@ -1,5 +1,5 @@
+import { fetchHost, fetchEvents } from '@/modules/sharing/queries';
 import { HostDetails } from '@/modules/sharing/components/HostDetails';
-import { fetchHost, fetchEvents } from '@/modules/sharing/server/query';
 import { PublicEventList } from '@/modules/sharing/components/PublicEventList';
 import { PoweredByRibbon } from '@/modules/sharing/components/PoweredByRibbon';
 

@@ -1,10 +1,11 @@
-import { Weekday } from '@/shared/schemas';
 import { toTitleCase } from '@/shared/lib/utils';
 import {
   Tooltip,
   TooltipContent,
   TooltipTrigger,
 } from '@/shared/components/ui/tooltip';
+
+import { Weekday } from '../enums';
 
 interface DayIndicatorProps {
   day: Weekday;
