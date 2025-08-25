@@ -1,6 +1,6 @@
 import z from 'zod';
 
-import { clientApi } from '@/shared/lib/client-api';
+import { api } from '@/shared/lib/api';
 
 export async function signUp(userData: {
   name: string;
@@ -8,7 +8,7 @@ export async function signUp(userData: {
   timezone: string;
   password: string;
 }) {
-  return clientApi('@post/auth/signup', {
+  return api('@post/auth/signup', {
     body: userData,
     output: z.object({
       email: z.string(),

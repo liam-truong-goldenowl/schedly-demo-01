@@ -2,7 +2,7 @@ import { LoaderCircleIcon } from 'lucide-react';
 
 import { Button } from '@/shared/components/ui/button';
 
-export type StatefulButtonProps = React.ComponentProps<typeof Button> & {
+type StatefulButtonProps = React.ComponentProps<typeof Button> & {
   loading?: boolean;
 };
 

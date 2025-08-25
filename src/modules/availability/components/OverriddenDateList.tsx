@@ -8,7 +8,7 @@ import { MapItem } from '@/shared/components/MapItem';
 import { MapList } from '@/shared/components/MapList';
 import { Button } from '@/shared/components/ui/button';
 
-import { DateOverride } from '../schemas';
+import { DateOverride } from '../types';
 import { useActiveSchedule } from '../hooks/useActiveSchedule';
 import { useScheduleMutations } from '../hooks/useScheduleMutations';
 

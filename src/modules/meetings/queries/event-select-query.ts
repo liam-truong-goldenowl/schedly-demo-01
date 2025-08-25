@@ -1,20 +1,15 @@
-import z from 'zod';
 import { queryOptions } from '@tanstack/react-query';
 
-import { clientApiWithAuth } from '@/shared/lib/client-api';
+import { api } from '@/shared/lib/api';
+
+import { EventSelectListSchema } from '../schemas';
 
 export const eventSelectQuery = queryOptions({
   queryKey: ['event-select'],
   queryFn: async () =>
-    clientApiWithAuth('@get/events/select', {
+    api('@get/events/select', {
       throw: true,
-      output: z.array(
-        z.object({
-          id: z.number(),
-          slug: z.string(),
-          name: z.string(),
-        }),
-      ),
+      output: EventSelectListSchema,
     }),
   staleTime: Number.POSITIVE_INFINITY,
 });

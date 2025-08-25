@@ -2,7 +2,7 @@
 
 import { use, createContext } from 'react';
 
-import { Schedule } from '../schemas';
+import { Schedule } from '../types';
 import { useSchedulesQuery } from '../hooks/useSchedulesQuery';
 
 const AvailabilityContext = createContext({

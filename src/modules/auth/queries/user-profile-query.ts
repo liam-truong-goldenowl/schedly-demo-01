@@ -1,12 +1,12 @@
 import z from 'zod';
 import { queryOptions } from '@tanstack/react-query';
 
-import { clientApiWithAuth } from '@/shared/lib/client-api';
+import { api } from '@/shared/lib/api';
 
 export const userProfileQuery = queryOptions({
   queryKey: ['user', 'profile'],
   queryFn: async () => {
-    return clientApiWithAuth('@get/profile', {
+    return api('@get/profile', {
       output: z.object({
         email: z.string(),
         name: z.string(),

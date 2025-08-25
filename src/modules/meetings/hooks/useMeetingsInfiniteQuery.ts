@@ -7,6 +7,11 @@ import { useMeetingsQueryState } from './useMeetingsQueryState';
 export function useMeetingsInfiniteQuery() {
   const { period, eventType, from, to } = useMeetingsQueryState();
   return useInfiniteQuery(
-    meetingsQuery({ period, eventType, startDate: from, endDate: to }),
+    meetingsQuery({
+      period,
+      eventSlug: eventType,
+      startDate: from,
+      endDate: to,
+    }),
   );
 }

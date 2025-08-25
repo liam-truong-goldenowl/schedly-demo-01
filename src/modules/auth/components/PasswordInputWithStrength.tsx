@@ -11,7 +11,7 @@ import {
   AT_LEAST_ONE_LOWERCASE,
   AT_LEAST_ONE_UPPERCASE,
   AT_LEAST_EIGHT_CHARACTERS,
-} from '@/shared/constants/regex';
+} from '@/shared/constants';
 
 import { PasswordInput } from './PasswordInput';
 

@@ -1,4 +1,4 @@
-import { clientApiWithAuth } from '@/shared/lib/client-api';
+import { api } from '@/shared/lib/api';
 import { makeCursorPaginationSchema } from '@/shared/schemas';
 
 import { EventSchema } from '../schemas';
@@ -10,7 +10,7 @@ export async function createEvent(body: {
   inviteeLimit: number;
   description?: string;
 }) {
-  return clientApiWithAuth('@post/events', { body, throw: true });
+  return api('@post/events', { body, throw: true });
 }
 
 export async function getEvents({
@@ -20,7 +20,7 @@ export async function getEvents({
   cursor: string | null;
   search: string | null;
 }) {
-  return clientApiWithAuth('@get/events', {
+  return api('@get/events', {
     throw: true,
     output: makeCursorPaginationSchema(EventSchema),
     query: { cursor, search },
@@ -28,5 +28,5 @@ export async function getEvents({
 }
 
 export async function deleteEvent(eventId: number) {
-  return clientApiWithAuth(`@delete/events/${eventId}`, { throw: true });
+  return api(`@delete/events/${eventId}`, { throw: true });
 }

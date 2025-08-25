@@ -1,23 +1,17 @@
-import z from 'zod';
+import { api } from '@/shared/server/api';
 
-import { serverApi } from '@/shared/lib/server-api';
+import { TokensSchema } from '../../schemas';
 
 export async function login(credentials: { email: string; password: string }) {
-  return serverApi('@post/auth/login', {
+  return api('@post/auth/login', {
     body: credentials,
-    output: z.object({
-      accessToken: z.string(),
-      refreshToken: z.string(),
-    }),
+    output: TokensSchema,
   });
 }
 
 export async function refresh(refreshToken: string) {
-  return serverApi('@post/auth/refresh', {
-    output: z.object({
-      accessToken: z.string(),
-      refreshToken: z.string(),
-    }),
+  return api('@post/auth/refresh', {
+    output: TokensSchema,
     onRequest(context) {
       context.headers.set('Authorization', `Bearer ${refreshToken}`);
       return context;

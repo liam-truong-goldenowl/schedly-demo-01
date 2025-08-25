@@ -5,7 +5,7 @@ import { useLocale, useTranslations } from 'next-intl';
 import { Check, Globe, ChevronDown } from 'lucide-react';
 
 import { Locale, LOCALES } from '@/i18n/config';
-import { setUserLocale } from '@/shared/lib/locale';
+import { setUserLocale } from '@/shared/server/locale';
 import {
   DropdownMenu,
   DropdownMenuItem,
