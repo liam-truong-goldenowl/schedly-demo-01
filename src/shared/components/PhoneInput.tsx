@@ -10,6 +10,7 @@ import { Input } from '@/shared/components/ui/input';
 
 export function PhoneInput({
   value: initialValue,
+  className,
   onChange,
   ...props
 }: React.ComponentPropsWithoutRef<'input'>) {
@@ -26,7 +27,7 @@ export function PhoneInput({
 
   return (
     <RPNInput.default
-      className="flex rounded-md shadow-xs"
+      className={cn('flex rounded-md shadow-xs', className)}
       international
       flagComponent={FlagComponent}
       countrySelectComponent={CountrySelect}
